@@ -9,6 +9,12 @@ body {
     height: 100vh;
     font-size: 1.6rem;
     font-family: Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+    height: 100%;
 }
 
 /* Layout */
@@ -118,4 +124,4 @@ img.medium {
     color: #f0c040;
     margin: 0.1rem;
 }
-/*End: rating */
+/*End: rating star icons */

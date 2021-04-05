@@ -24,3 +24,4 @@ yarn-error.log*
 
 robots.txt
 README.md
+frontend/package-lock.json

@@ -5,7 +5,7 @@ export default function Product(props) {
     const { set_product } = props;
     return (
         <div key={set_product._id} className="card">
-            <a href={`/set_product/${set_product._id}`}>
+            <a href={`/product/${set_product._id}`}>
                 <img
                     className="medium"
                     src={set_product.image}
@@ -13,7 +13,7 @@ export default function Product(props) {
                 />
             </a>
             <div className="card-body">
-                <a href={`/set_product/${set_product._id}`}>
+                <a href={`/product/${set_product._id}`}>
                     <h2>{set_product.name}</h2>
                 </a>
 

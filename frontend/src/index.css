@@ -57,7 +57,7 @@ a {
     text-decoration: none;
 }
 
-/* "Hover" muestra el color "naranja" al pasar el cursor sobre el text */
+/** "Hover" muestra el color "naranja" al pasar el cursor sobre el text */
 a:hover {
     color: #ff8000;
 }
@@ -145,7 +145,7 @@ img.medium {
     max-width: 29rem;
     width: 100%;
 }
-/*End: image */
+/* End: image */
 
 /* Image ProductScreen */
 img.large {
@@ -183,14 +183,45 @@ img.large {
 .rating span:last-child {
     color: #404040;
 }
-/*End: rating star icons */
+/* End: rating star icons */
 
 /* Alert ProductScreen */
 .success {
     color: #20a020;
 }
 
-.error {
+.danger {
     color: #a02020;
 }
 /* End: Alert ProductScreen */
+
+/*? Alert "MessageBox" */
+.alert {
+    padding: 1rem;
+    border: 0.1rem solid transparent;
+    border-radius: 0.5rem;
+}
+
+.alert-info {
+    color: #2020a0;
+    background-color: #e0e0ff;
+}
+
+.alert-danger {
+    color: #a02020;
+    background-color: #ffe0e0;
+}
+/*? End: Alert "MessageBox" */
+
+/* Spinner "LoadingBox" */
+.spinner span {
+    display: flex;
+    justify-content: center;
+    color: #ff8000;
+    margin: 1rem;
+}
+
+.spinner span:last-child {
+    color: #404040;
+}
+/* Spinner "LoadingBox" */

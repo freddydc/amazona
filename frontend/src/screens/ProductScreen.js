@@ -66,7 +66,7 @@ export default function ProductScreen(props) {
                                                 In Stock
                                             </span>
                                         ) : (
-                                            <span className="error">
+                                            <span className="danger">
                                                 Unavailable
                                             </span>
                                         )}

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Rantind(props) {
+export default function Rating(props) {
     const { set_rating, set_numReviews } = props;
 
     return (

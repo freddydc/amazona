@@ -21,7 +21,7 @@ function App() {
                 <main>
                     {/* Nota: "exact" Si url is exact to "/" render HomeScreen */}
                     <Route path="/" component={HomeScreen} exact></Route>
-                    {/* Nota: The url colon parameter "/:id" get the "id" of products, this "id" is used in "ProductSreen" to evaluated "id" */}
+                    {/* Nota: The url colon parameter "/:id" get the "id" of products, this "id" is used in "ProductScreen" to evaluated "id" */}
                     <Route
                         path="/product/:id"
                         component={ProductScreen}

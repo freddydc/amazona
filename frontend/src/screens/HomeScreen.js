@@ -1,37 +1,20 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import Product from "../components/Product";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
+import { useDispatch, useSelector } from "react-redux";
+import { listProducts } from "../actions/productActions";
 
 export default function HomeScreen() {
-    //* Initial default "products" data empty array
-    //* Before "setProducts" set data to "products"
-    const [products, setProducts] = useState([]);
-    //? Console
-    // console.log("products:", products, "\nsetProducts:", setProducts);
+    const dispatch = useDispatch();
+    //? Get "productList" data from redux "src/store.js"
+    const productList = useSelector((state) => state.productList);
+    //* "loading", "error", "products", to get data from "store.js".
+    const { loading, error, products } = productList;
 
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
-
-    //* Two params, second "array" accept node dependencies
     useEffect(() => {
-        const fecthData = async () => {
-            try {
-                setLoading(true);
-                const { data } = await axios.get("/api/products");
-                setLoading(false);
-                //? Console
-                // console.log("data:", data);
-                setProducts(data);
-            } catch (err) {
-                //** Nota, err.message: "Request failed with status code 500"
-                setError(err.message);
-                setLoading(false);
-            }
-        };
-        fecthData();
-    }, []);
+        dispatch(listProducts());
+    }, [dispatch]);
 
     return (
         <div>

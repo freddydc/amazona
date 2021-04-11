@@ -216,12 +216,26 @@ img.large {
 /* Spinner "LoadingBox" */
 .spinner span {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     color: #ff8000;
-    margin: 1rem;
+    margin: 1.5rem;
 }
 
 .spinner span:last-child {
+    font-size: 1.5rem;
     color: #404040;
 }
 /* Spinner "LoadingBox" */
+
+/* Back to Home "Message" */
+.back-home span {
+    font-size: 1.5rem;
+    color: #404040;
+    margin: 0.2rem;
+}
+
+.back-home span:last-child:hover {
+    font-size: 1.6rem;
+}
+/* End:  Back to Home "Message" */

@@ -1,6 +1,9 @@
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
-import { productListReducer } from "./reducers/productReducers";
+import {
+    productDetailsReducer,
+    productListReducer,
+} from "./reducers/productReducers";
 
 const initialState = {};
 
@@ -13,9 +16,10 @@ const initialState = {};
     };
 */
 
-//? Redux store
+//? Redux store from "reducers"
 const reducer = combineReducers({
     productList: productListReducer,
+    productDetails: productDetailsReducer,
 });
 
 //? "composeEnhancer" update default "compose()" function , to show redux "store".

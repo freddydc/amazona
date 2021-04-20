@@ -158,22 +158,36 @@ a.brand {
 }
 /* End: ProductScreen */
 
-/* Image */
+/* Shipping cart product name */
+.min-30 {
+  min-width: 30rem;
+}
+/* End: Shipping cart product name */
+
+/** Image */
 img {
   border-radius: 0.5rem;
 }
+
+/* Shipping cart image */
+img.small {
+  max-width: 5rem;
+  width: 100%;
+}
+/* End: Shipping cart image */
 
 img.medium {
   max-width: 29rem;
   width: 100%;
 }
-/* End: image */
 
-/* Image ProductScreen */
+/* Image Product Screen */
 img.large {
   width: 100%;
 }
-/* End: image ProductScreen */
+/* End: image Product Screen */
+
+/** End: image */
 
 /* Card */
 .card {

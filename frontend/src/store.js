@@ -21,9 +21,9 @@ const initialState = {
 
 /*
 ? Nota:
-* Use without reducers need import "data.js" for return "state" = products.
-* STATE: before: "empty" => later: "products"
-* ACTION: type: "INIT"
+* Use without reducers, need import "data.js" for return "state" = products.
+* STATE: before = "empty", later: "products".
+* ACTION: type = "INIT".
   const reducer = (state, action) => {
     return { products: data.products };
   };

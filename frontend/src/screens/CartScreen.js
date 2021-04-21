@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { addToCart } from "../actions/cartActions";
+import { addToCart, removeFromCart } from "../actions/cartActions";
 import MessageBox from "../components/MessageBox";
 
 export default function CartScreen(props) {
@@ -29,18 +29,20 @@ export default function CartScreen(props) {
   * If product 'id' exist, dispatch action & set 'productId' and 'qty'.
   */
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (productId) {
       dispatch(addToCart(productId, qty));
     }
   }, [dispatch, productId, qty]);
 
-  //? Remove cart item button
+  //? Remove 'CART ITEMS' button
   const removeFromCartHandler = (id) => {
-    // Delete action
+    //* Delete action, by 'Remove From Cart' action defined.
+    dispatch(removeFromCart(id));
   };
 
-  //? Checkout cart item button
+  //? Checkout 'CART ITEM' button
   const checkoutHandler = () => {
     props.history.push("/signin?redirect=shipping");
   };

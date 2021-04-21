@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { CART_ADD_ITEM } from "../constants/cartConstants";
+import { CART_ADD_ITEM, CART_REMOVE_ITEM } from "../constants/cartConstants";
 
 /*
 ? Note:
@@ -35,5 +35,12 @@ export const addToCart = (productId, qty) => async (dispatch, getState) => {
   * Local Storage: setItem('key name custom', value: string)
   * Get access: 'getState().cart.cartItems' from redux thunk, by redux 'store'.
   */
+  localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
+};
+
+//? Remove Cart Item & Update Local Storage
+export const removeFromCart = (productId) => (dispatch, getState) => {
+  dispatch({ type: CART_REMOVE_ITEM, payload: productId });
+  //* Update local storage.
   localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 };

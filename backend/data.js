@@ -1,4 +1,21 @@
+//? BcryptJS library for 'encrypt plain text password' in mongodb.
+import bcrypt from "bcryptjs";
+
 const data = {
+  users: [
+    {
+      name: "Felipe Cast",
+      email: "admin@example.com",
+      password: bcrypt.hashSync("admin123", 8),
+      isAdmin: true,
+    },
+    {
+      name: "John Stars",
+      email: "user@example.com",
+      password: bcrypt.hashSync("user123", 8),
+      isAdmin: false,
+    },
+  ],
   products: [
     {
       _id: "1",

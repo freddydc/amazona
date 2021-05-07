@@ -1,0 +1,11 @@
+FROM node:14-alpine AS builder
+WORKDIR /usr/src/backend/
+COPY ["package*.json", "./"]
+RUN npm install
+COPY [".", "./"]
+
+FROM node:14-alpine
+WORKDIR /usr/src/backend/
+COPY --from=builder ["/usr/src/backend/", "./"]
+EXPOSE 5000
+CMD ["npm", "start"]

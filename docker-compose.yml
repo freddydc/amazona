@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+  mongodb:
+    image: mongo:4-bionic
+    container_name: amazona_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    networks:
+      - store-tier
+    volumes:
+      - db-data:/data/db
+  backend:
+    image: backend
+    container_name: amazona_server
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    networks:
+      - store-tier
+    volumes: 
+      - ./backend:/usr/src/backend
+      - /usr/src/backend/node_modules
+    links: 
+      - mongodb
+    depends_on:
+      - mongodb
+  frontend:
+    image: frontend
+    container_name: amazona_client
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - store-tier
+    volumes: 
+      - ./frontend:/usr/src/frontend
+      - /usr/src/frontend/node_modules
+    depends_on: 
+      - backend
+networks:
+  store-tier:
+    driver: bridge
+volumes:
+  db-data:

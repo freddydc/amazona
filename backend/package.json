@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch backend --exec node --experimental-modules backend/server.js"
+    "start": "nodemon --exec node --experimental-modules server.js"
   },
   "repository": {
     "type": "git",
@@ -18,9 +18,15 @@
     "url": "https://github.com/freddydc/amazona/issues"
   },
   "homepage": "https://github.com/freddydc/amazona#readme",
-  "dependencies": {},
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "mongoose": "^5.12.5"
+  },
   "devDependencies": {
     "eslint": "^7.23.0",
-    "eslint-plugin-react": "^7.23.1"
+    "eslint-plugin-react": "^7.23.1",
+    "nodemon": "^2.0.7"
   }
 }

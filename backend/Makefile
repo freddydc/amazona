@@ -1,55 +1,50 @@
-# Create an image for backend.
-build:
+# --> Production And Development Image Builder.
+# Development.
+dev-build:
+	sudo docker build -t backend-dev -f Dockerfile.dev .
+# Production.
+prod-build:
 	sudo docker build -t backend .
-
-net-ls:
-	cd ../ && $(MAKE) net-ls
-
-run:
-	sudo docker run --name amazona_server --rm -p 5000:5000 backend
-
-alpine:
-	cd ../ && $(MAKE) alpine
-
-run-b:
-	cd ../ && $(MAKE) run-b
-run-f:
-	cd ../ && $(MAKE) run-f
-
-exec-mongo:
-	cd ../ && $(MAKE) exec-mongo
-
-exec-b:
-	cd ../ && $(MAKE) exec-b
-exec-f:
-	cd ../ && $(MAKE) exec-f
-
-img:
-	cd ../ && $(MAKE) img
-a-ps:
-	cd ../ && $(MAKE) a-ps
-
-dl-img:
+# Run Containers Port.
+ru-api-dev:
+	cd ../ && $(MAKE) run-api-dev
+ru-api-prod:
+	cd ../ && $(MAKE) run-api-prod
+# Remove Image.
+rm-img:
 	sudo docker rmi backend
 
+# --> Docker Commands.
+img:
+	cd ../ && $(MAKE) img
+ps:
+	cd ../ && $(MAKE) ps
+nt-ls:
+	cd ../ && $(MAKE) nt-ls
+
+e-mongo:
+	cd ../ && $(MAKE) e-mongo
+e-api-dev:
+	cd ../ && $(MAKE) e-api-dev
+e-front-dev:
+	cd ../ && $(MAKE) e-front-dev
+
+pr:
+	cd ../ && $(MAKE) pr
 img-pr:
 	cd ../ && $(MAKE) img-pr
+c-pr:
+	cd ../ && $(MAKE) c-pr
+v-pr:
+	cd ../ && $(MAKE) v-pr
+nt-pr:
+	cd ../ && $(MAKE) nt-pr
 
-prune:
-	cd ../ && $(MAKE) prune
-
-con-pr:
-	cd ../ && $(MAKE) con-pr
-
-vl-pr:
-	cd ../ && $(MAKE) vl-pr
-
-net-pr:
-	cd ../ && $(MAKE) net-pr
-
-com-up:
-	cd ../ && $(MAKE) com-up
-com-stop:
-	cd ../ && $(MAKE) com-stop
-com-down:
-	cd ../ && $(MAKE) com-down
+up-dev:
+	cd ../ && $(MAKE) up-dev
+up-prod:
+	cd ../ && $(MAKE) up-prod
+dcm-stop:
+	cd ../ && $(MAKE) dcm-stop
+dcm-down:
+	cd ../ && $(MAKE) dcm-down

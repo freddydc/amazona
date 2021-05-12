@@ -2,7 +2,7 @@ version: "3.8"
 services:
   mongodb:
     image: mongo:4-bionic
-    container_name: mongo
+    container_name: store-mongo
     restart: unless-stopped
     ports:
       - "27017:27017"
@@ -12,8 +12,11 @@ services:
       - store-db:/data/db
 
   api:
-    image: backend
-    container_name: api
+    image: backend-dev
+    build:
+      context: ./backend
+      dockerfile: ./backend/Dockerfile.dev
+    container_name: store-api
     restart: unless-stopped
     ports:
       - "5000:5000"
@@ -26,8 +29,11 @@ services:
       - mongodb
 
   storefront:
-    image: frontend
-    container_name: front
+    image: frontend-dev
+    build: 
+      context: ./frontend
+      dockerfile: ./frontend/Dockerfile.dev
+    container_name: store-front
     restart: unless-stopped
     ports:
       - "3000:3000"

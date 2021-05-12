@@ -1,100 +1,161 @@
-# Docker service enable & disable.
-disable:
+# --> Enable And Disable Docker.
+di:
 	sudo systemctl disable --now docker
-enable:
+en:
 	sudo systemctl enable --now docker
 
-# Docker service info.
-status:
+# --> Docker Service Info.
+st:
 	sudo systemctl status docker
 
-# Main docker image builder.
-main-build:
-	cd ./backend && $(MAKE) build
-	cd ./frontend && $(MAKE) build
+# --> Main Docker Image Build.
+# Development image.
+dev-build:
+	sudo docker build -t backend-dev \
+		-f backend/Dockerfile.dev ./backend
 
-# Docker info.
-a-ps:
+	sudo docker build -t frontend-dev \
+		-f frontend/Dockerfile.dev ./frontend
+# Production image.
+prod-build:
+	sudo docker build -t backend \
+		-f backend/Dockerfile ./backend
+
+	sudo docker build -t frontend \
+		-f frontend/Dockerfile ./frontend
+
+# --> Docker Info.
+ps:
 	sudo docker ps -a
-net-ls:
+nt-ls:
 	sudo docker network ls
-vl-ls:
+nt-ins:
+	sudo docker network inspect \
+		amazona_store-tier
+v-ls:
 	sudo docker volume ls
 
-# Docker images info.
+# --> Push Image Docker Hub.
+push:
+	sudo docker login -u freddydc
+
+	sudo docker push \
+		freddydc/frontend:latest
+
+	sudo docker push \
+		freddydc/backend:latest
+
+	sudo docker logout
+
+# --> Docker Image Info.
 img:
 	sudo docker images
 
-dive-b:
+# Development
+dive-server-dev:
+	sudo docker run --rm -it \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    wagoodman/dive:v0.10 backend-dev
+dive-front-dev:
+	sudo docker run --rm -it \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    wagoodman/dive:v0.10 frontend-dev
+
+# Production
+dive-server:
 	sudo docker run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
     wagoodman/dive:v0.10 backend
-dive-f:
+dive-front:
 	sudo docker run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
     wagoodman/dive:v0.10 frontend
 
-# Docker images clean.
-dl-img-b:
+# --> Docker Image Clean.
+rm-server:
 	sudo docker rmi backend
-dl-img-f:
+rm-front:
 	sudo docker rmi frontend
-dl-all-img:
-	sudo docker rmi backend frontend
 
-# Docker Container: stop & remove.
-doc-stop:
+# Development
+rm-img-dev:
+	sudo docker rmi \
+		backend-dev \
+		frontend-dev
+# Production
+rm-img:
+	sudo docker rmi \
+		backend \
+		frontend
+
+# --> Docker Container: Stop And Remove.
+dc-stop:
 	sudo docker stop $$(sudo docker ps -a -q)
-doc-rm:
+dc-rm:
 	sudo docker rm $$(sudo docker ps -a -q)
 
-# Docker Compose: up - stop - down.
-com-up:
+# --> Docker Compose: Up - Stop - Down.
+# Development.
+up-dev:
+	sudo docker-compose -f docker-compose.dev.yml up
+# Production.
+up-prod:
 	sudo docker-compose up
-com-stop:
+
+dcm-stop:
 	sudo docker-compose stop
-com-down:
+dcm-down:
 	sudo docker-compose down
 
-# Docker run.
-alpine:
-	sudo docker run --rm -it alpine:3.13
+# --> Docker Run Containers.
+ru-alpine:
+	sudo docker run --name alpine \
+		--rm -it alpine:3.13
 
-run-b-p:
-	cd ./backend && $(MAKE) run
-run-f-p:
-	cd ./frontend && $(MAKE) run
+ru-api-dev:
+	sudo docker run --name api \
+		--rm -p 5000:5000 backend-dev
+ru-front-dev:
+	sudo docker run --name front \
+		--rm -p 3000:3000 frontend-dev
 
-run-b:
-	sudo docker run --name amazona_server --rm -it backend
-run-f:
-	sudo docker run --name amazona_client --rm -it frontend
+ru-api-prod:
+	sudo docker run --name api \
+		--rm -p 5000:5000 backend
+ru-front-prod:
+	sudo docker run --name front \
+		--rm -p 3000:3000 frontend
 
-# Docker exec.
-exec-mongo:
-	sudo docker exec -it amazona_mongo bash
-exec-b:
-	sudo docker exec -it amazona_server sh
-exec-f:
-	sudo docker exec -it amazona_client sh
+# --> Docker Exec Container.
+e-mongo:
+	sudo docker exec -it mongo bash
 
-# Docker clean.
-prune:
+e-api-dev:
+	sudo docker exec -it store-api sh
+e-front-dev:
+	sudo docker exec -it store-front sh
+e-api:
+	sudo docker exec -it api sh
+e-front:
+	sudo docker exec -it front sh
+
+# --> Docker Clean.
+pr:
 	sudo docker system prune
 
 img-pr:
 	sudo docker image prune
 
-con-pr:
+c-pr:
 	sudo docker container prune
-con-clean:
+c-cl:
 	sudo docker stop $$(sudo docker ps -a -q)
 	sudo docker rm $$(sudo docker ps -a -q)
 
-vl-pr:
+v-pr:
 	sudo docker volume prune
-net-pr:
+nt-pr:
 	sudo docker network prune
 
-db-vl-dl:
-	sudo docker volume rm amazona_db-data
+rm-mo-v:
+	sudo docker volume rm amazona_store-data

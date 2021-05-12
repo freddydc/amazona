@@ -1,39 +1,33 @@
 import express from "express";
 import mongoose from "mongoose";
-import data from "./data.js";
+import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 /*
-? NOTA: Mongoose Connection.
+? Nota: Mongoose Connection.
 * first param database URL: 'mongodb://localhost/amazona'
-TODO: 'Learn' second param for options:
-* 'useNewUrlParser: true' = get 'warnings' for duplicates in mongodb collection.
+
+TODO: Learn second param for options:
+* useNewUrlParser: true = for get 'warnings',
+* for duplicates in mongodb collection.
 */
 
-const mongodbUrl = "mongodb://mongodb:27017/amazona";
-
-mongoose.connect(process.env.MONGODB_URL || mongodbUrl, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
-
+/*
 app.get("/api/products/:id", (req, res) => {
-  /*
-  ? NOTA: "/:id" for "req.params.id", to user "input".
-  * The "product" is received in reducers "Product Details".
-  */
+  ? Nota: (/:id) for (req.params.id), to user (input).
+  * The (product) is received in actions and reducers folder,
+  * ... for (product List and Details) in Action and Reducer.
 
   const product = data.products.find((x) => x._id === req.params.id);
 
-  //* Check "product" exist
+  * Check (product) exist
   if (product) {
     res.send(product);
   } else {
-    //* Create custom "message" for error
+    * Create custom (message) for error
     res.status(404).send({ message: "Product Not Found" });
   }
 });
@@ -41,15 +35,26 @@ app.get("/api/products/:id", (req, res) => {
 app.get("/api/products", (req, res) => {
   res.send(data.products);
 });
+*/
 
-//* Responses to router from 'routers', for 'User Router' in mongodb.
+const urlMongodb = "mongodb://mongodb:27017/amazona";
+const optMongodb = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+};
 
+mongoose.connect(process.env.MONGODB_URL || urlMongodb, optMongodb);
+
+//* Response a router from (routers folder).
 app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 
 /*
-? NOTA: Send message error to client.
-* Show 'error messages' from 'routers' UserRouter, 'middleware' error catcher.
-TODO: Try the message error key 'name'.
+? Nota: Send message error to (front).
+* Show (error) messages from (routers folder), 
+* ... (middleware) error catcher.
+TODO: Try the message error key (name).
 */
 
 app.use((err, req, res, next) => {

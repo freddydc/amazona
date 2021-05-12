@@ -1,13 +1,15 @@
 import mongoose from "mongoose";
 
 /*
-? NOTA: Create schema for user.
-* Attribute: 'required: true', mongoose check validation.
-? Attribute: 'unique: true', mongoose create an 'unique index' in collection,
-? ... for make sure evite duplicates.
-TODO: Learn second param for 'mongoose' schema: 
-? Schema Options = 'timestamps'
-* timestamps: automatically assign 'createdAt' & 'updatedAt'.
+? Nota: Create schema for user.
+* Attribute: (required: true), mongoose check validation.
+
+* Attribute: (unique: true), mongoose create an (unique index),
+* ... in collection for make sure avoid duplicates (users).
+
+TODO: Learn second param for, mongoose schema: 
+? Schema Options = timestamps
+* timestamps: automatically assign, (createdAt and updatedAt) in mongodb.
 */
 
 const userSchema = new mongoose.Schema(
@@ -23,8 +25,8 @@ const userSchema = new mongoose.Schema(
 );
 
 /*
-? NOTA: Create model for user.
-* Define: mongoose.model('Model Name', modelSchema)
+? Nota: Create model for user.
+* Define: mongoose.model(modelName, modelSchema)
 */
 
 const User = mongoose.model("User", userSchema);

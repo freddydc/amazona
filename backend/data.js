@@ -1,4 +1,4 @@
-//? BcryptJS library for 'encrypt plain text password' in mongodb.
+//? BcryptJS library for (encrypt plain text password) for mongodb.
 import bcrypt from "bcryptjs";
 
 const data = {
@@ -18,7 +18,6 @@ const data = {
   ],
   products: [
     {
-      _id: "1",
       name: "Canon C70",
       category: "cameras",
       image: "/images/camera-p1.jpg",
@@ -30,7 +29,6 @@ const data = {
       description: "High quality Camera C70",
     },
     {
-      _id: "2",
       name: "Adidas Pants",
       category: "Pants",
       image: "/images/pants-p2.jpg",
@@ -42,7 +40,6 @@ const data = {
       description: "High quality Adidas Pants",
     },
     {
-      _id: "3",
       name: "Nike Shoes",
       category: "Shoes",
       image: "/images/shoes-p3.jpg",
@@ -54,7 +51,6 @@ const data = {
       description: "High quality Nike Shoes",
     },
     {
-      _id: "4",
       name: "Zara Shirt",
       category: "Shirt",
       image: "/images/shirt-p4.jpg",
@@ -66,7 +62,6 @@ const data = {
       description: "High quality Zara Shirt",
     },
     {
-      _id: "5",
       name: "Air Pods Max",
       category: "Air Pods",
       image: "/images/air-pods-p5.jpg",
@@ -78,7 +73,6 @@ const data = {
       description: "High quality Air Pods Max",
     },
     {
-      _id: "6",
       name: "Apple Watch Nike",
       category: "Watch",
       image: "/images/watch-p6.jpg",

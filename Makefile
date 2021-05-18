@@ -1,3 +1,42 @@
+# MAKEFILE:
+# --> Docker.
+compose = sudo docker-compose
+docker = sudo docker
+# --> Mongodb.
+MONGODB_URL = MONGODB_URL=mongodb://mongo-test:27017/AmazonaAIR
+MONGO_BIONIC = mongo:4-bionic
+# --> Messages.
+ctInfo = echo "\n Containers empty. \n"
+tagInfo = echo "\n No image to tag. \n"
+pushInfo = echo "\n Image not exist to push. \n"
+netInfo = echo "\n Network already exist. \n"
+
+# --> Production Image Tags.
+SERVER = backend:v0.1.0
+FRONT = frontend:v0.1.0
+
+# --> Development Image tags.
+serverDev = backend
+frontDev = frontend
+
+USER = freddydc
+
+# --> Utils.
+ALPINE = alpine:3.13
+frontPath = ./frontend
+serverPath = ./backend
+
+composeFile = docker-compose.dev.yml
+DIVE = wagoodman/dive:v0.10
+mgData = amazona_store-data
+storeNetwork = amazona_store-tier
+testNet = red
+
+# --> Help.
+help:
+	@echo "Commands:"
+	@echo "  make ps    List containers running and stopped"
+
 # --> Enable And Disable Docker.
 di:
 	sudo systemctl disable --now docker
@@ -11,151 +50,180 @@ st:
 # --> Main Docker Image Build.
 # Development image.
 dev-build:
-	sudo docker build -t backend-dev \
-		-f backend/Dockerfile.dev ./backend
+	${docker} build -t backend \
+		-f backend/Dockerfile.dev ${serverPath}
 
-	sudo docker build -t frontend-dev \
-		-f frontend/Dockerfile.dev ./frontend
+	${docker} build -t frontend \
+		-f frontend/Dockerfile.dev ${frontPath}
 # Production image.
 prod-build:
-	sudo docker build -t backend \
-		-f backend/Dockerfile ./backend
+	${docker} build -t ${SERVER} \
+		-f backend/Dockerfile ${serverPath}
 
-	sudo docker build -t frontend \
-		-f frontend/Dockerfile ./frontend
+	${docker} build -t ${FRONT} \
+		-f frontend/Dockerfile ${frontPath}
 
 # --> Docker Info.
 ps:
-	sudo docker ps -a
+	${docker} ps -a
+psl:
+	${docker} ps -l
+
 nt-ls:
-	sudo docker network ls
+	${docker} network ls
 nt-ins:
-	sudo docker network inspect \
-		amazona_store-tier
-v-ls:
-	sudo docker volume ls
+	${docker} network inspect ${storeNetwork}
+vl-ls:
+	${docker} volume ls
+
+# --> Production tags.
+tags-prod:
+	${docker} tag frontend:v0.1.0 ${USER}/frontend:v0.1.0 || ${tagInfo}
+	${docker} tag backend:v0.1.0 ${USER}/backend:v0.1.0 || ${tagInfo}
 
 # --> Push Image Docker Hub.
 push:
-	sudo docker login -u freddydc
+	${docker} login -u ${USER}
 
-	sudo docker push \
-		freddydc/frontend:latest
+	${docker} push ${USER}/frontend:v0.1.0 || ${pushInfo}
+	${docker} push ${USER}/backend:v0.1.0	|| ${pushInfo}
 
-	sudo docker push \
-		freddydc/backend:latest
-
-	sudo docker logout
+	${docker} logout
 
 # --> Docker Image Info.
 img:
-	sudo docker images
+	${docker} images
 
 # Development
 dive-server-dev:
-	sudo docker run --rm -it \
+	${docker} run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    wagoodman/dive:v0.10 backend-dev
+    ${DIVE} ${serverDev}
 dive-front-dev:
-	sudo docker run --rm -it \
+	${docker} run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    wagoodman/dive:v0.10 frontend-dev
+    ${DIVE} ${frontDev}
 
 # Production
 dive-server:
-	sudo docker run --rm -it \
+	${docker} run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    wagoodman/dive:v0.10 backend
+    ${DIVE} ${SERVER}
 dive-front:
-	sudo docker run --rm -it \
+	${docker} run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    wagoodman/dive:v0.10 frontend
+    ${DIVE} ${FRONT}
 
 # --> Docker Image Clean.
 rm-server:
-	sudo docker rmi backend
+	${docker} rmi ${SERVER}
 rm-front:
-	sudo docker rmi frontend
+	${docker} rmi ${FRONT}
 
-# Development
+# Development.
 rm-img-dev:
-	sudo docker rmi \
+	${docker} rmi \
 		backend-dev \
 		frontend-dev
-# Production
+# Production.
 rm-img:
-	sudo docker rmi \
-		backend \
-		frontend
+	${docker} rmi ${SERVER} ${FRONT}
 
-# --> Docker Container: Stop And Remove.
-dc-stop:
-	sudo docker stop $$(sudo docker ps -a -q)
-dc-rm:
-	sudo docker rm $$(sudo docker ps -a -q)
-
-# --> Docker Compose: Up - Stop - Down.
+# --> Docker Compose:
+dcm-ps:
+	${compose} ps
+# Production.
+up:
+	${compose} up -d
 # Development.
 up-dev:
-	sudo docker-compose -f docker-compose.dev.yml up
-# Production.
-up-prod:
-	sudo docker-compose up
+	${compose} -f ${composeFile} up
 
 dcm-stop:
-	sudo docker-compose stop
+	${compose} stop
 dcm-down:
-	sudo docker-compose down
+	${compose} down
+
+dcm-logs:
+	${compose} logs
+dcm-logs-mongo:
+	${compose} logs mongodb
+dcm-logs-api:
+	${compose} logs api
+dcm-logs-front:
+	${compose} logs storefront
+dcm-logs-f:
+	${compose} logs -f api storefront mongodb
+
+dcm-build:
+	${compose} build
+dcm-build-dev:
+	${compose} -f ${composeFile} build
+
+# --> Manually run: mongo - server - front.
+run-mnl:
+	${docker} network create --attachable ${testNet} || ${netInfo}
+
+	${docker} run -d --name store-mongo --rm -p 27018:27017 \
+		--mount src=amazona_store-data,dst=/data/db ${MONGO_BIONIC}
+
+	${docker} run -d --name store-api --rm -p 5000:5000 \
+		--env ${MONGODB_URL} ${serverDev}
+
+	${docker} run -d --name store-front --rm -p 3000:3000 ${frontDev}
+
+	${docker} network connect ${testNet} store-mongo
+	${docker} network connect ${testNet} store-api
+	${docker} network connect ${testNet} store-front
 
 # --> Docker Run Containers.
-ru-alpine:
-	sudo docker run --name alpine \
-		--rm -it alpine:3.13
+run-alpine:
+	${docker} run --name alpine --rm -it ${ALPINE}
 
-ru-api-dev:
-	sudo docker run --name api \
-		--rm -p 5000:5000 backend-dev
-ru-front-dev:
-	sudo docker run --name front \
-		--rm -p 3000:3000 frontend-dev
+run-api-dev:
+	${docker} run --name store-api --rm -p 5000:5000 ${serverDev}
+run-front-dev:
+	${docker} run --name store-front --rm -p 3000:3000 ${frontDev}
 
-ru-api-prod:
-	sudo docker run --name api \
-		--rm -p 5000:5000 backend
-ru-front-prod:
-	sudo docker run --name front \
-		--rm -p 3000:3000 frontend
+run-api:
+	${docker} run --name api --rm -p 5000:5000 ${SERVER}
+run-front:
+	${docker} run --name front --rm -p 3000:3000 ${FRONT}
 
 # --> Docker Exec Container.
-e-mongo:
-	sudo docker exec -it mongo bash
+exec-mongo-dev:
+	${docker} exec -it store-mongo bash
+exec-api-dev:
+	${docker} exec -it store-api sh
+exec-front-dev:
+	${docker} exec -it store-front sh
 
-e-api-dev:
-	sudo docker exec -it store-api sh
-e-front-dev:
-	sudo docker exec -it store-front sh
-e-api:
-	sudo docker exec -it api sh
-e-front:
-	sudo docker exec -it front sh
+exec-api:
+	${docker} exec -it api sh
+exec-front:
+	${docker} exec -it front sh
 
 # --> Docker Clean.
 pr:
-	sudo docker system prune
+	${docker} system prune
 
 img-pr:
-	sudo docker image prune
+	${docker} image prune
 
-c-pr:
-	sudo docker container prune
-c-cl:
-	sudo docker stop $$(sudo docker ps -a -q)
-	sudo docker rm $$(sudo docker ps -a -q)
+# Docker Container: Stop And Remove.
+ct-pr:
+	${docker} container prune
+ct-stop:
+	${docker} stop `${docker} ps -aq` || ${ctInfo}
+ct-rm:
+	${docker} rm $$(${docker} ps -a -q) || ${ctInfo}
 
-v-pr:
-	sudo docker volume prune
+ct-clear: ct-stop ct-rm
+
+vl-pr:
+	${docker} volume prune
 nt-pr:
-	sudo docker network prune
+	${docker} network prune
 
-rm-mo-v:
-	sudo docker volume rm amazona_store-data
+rm-mg-vl:
+	${docker} volume rm ${mgData}

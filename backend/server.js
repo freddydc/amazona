@@ -1,9 +1,17 @@
 import express from "express";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 
+dotenv.config();
+
 const app = express();
+
+// TODO: Learn GET and POST method express.
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const port = process.env.PORT || 5000;
 
 /*
@@ -37,14 +45,16 @@ app.get("/api/products", (req, res) => {
 });
 */
 
-const urlMongodb = "mongodb://mongodb:27017/amazona";
+const { MONGODB_HOSTNAME, MONGODB_PORT, MONGO_DB } = process.env;
+const urlMongodb = `mongodb://${MONGODB_HOSTNAME}:${MONGODB_PORT}/${MONGO_DB}`;
+
 const optMongodb = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
 };
 
-mongoose.connect(process.env.MONGODB_URL || urlMongodb, optMongodb);
+mongoose.connect(urlMongodb || "mongodb://localhost/amazona", optMongodb);
 
 //* Response a router from (routers folder).
 app.use("/api/users", userRouter);
@@ -52,7 +62,7 @@ app.use("/api/products", productRouter);
 
 /*
 ? Nota: Send message error to (front).
-* Show (error) messages from (routers folder), 
+* Show (error) messages from (routers folder),
 * ... (middleware) error catcher.
 TODO: Try the message error key (name).
 */

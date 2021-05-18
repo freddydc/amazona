@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   mongodb:
     image: mongo:4-bionic
@@ -12,31 +13,31 @@ services:
       - store-db:/data/db
 
   api:
-    image: backend
+    image: backend:v0.1.0
     container_name: api
     restart: unless-stopped
     ports:
       - "5000:5000"
     networks:
       - store-tier
-    volumes: 
+    volumes:
       - ./backend:/usr/src/backend
       - /usr/src/backend/node_modules
     depends_on:
       - mongodb
 
   storefront:
-    image: frontend
+    image: frontend:v0.1.0
     container_name: front
     restart: unless-stopped
     ports:
       - "3000:3000"
     networks:
       - store-tier
-    volumes: 
+    volumes:
       - ./frontend:/usr/src/frontend
       - /usr/src/frontend/node_modules
-    depends_on: 
+    depends_on:
       - api
 
 volumes:

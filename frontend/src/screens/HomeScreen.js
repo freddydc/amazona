@@ -6,32 +6,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../actions/productActions";
 
 export default function HomeScreen() {
-    const dispatch = useDispatch();
-    //? Get "productList" data from redux "src/store.js"
-    const productList = useSelector((state) => state.productList);
-    //* "loading", "error", "products", to get data from "store.js".
-    const { loading, error, products } = productList;
+  /*
+  ? Get "productList" data from redux "src/store.js"
+  * "loading", "error", "products", to get data from "store.js".
+  */
 
-    useEffect(() => {
-        dispatch(listProducts());
-    }, [dispatch]);
+  const dispatch = useDispatch();
+  const productList = useSelector((state) => state.productList);
+  const { loading, error, products } = productList;
 
-    return (
-        <div>
-            {loading ? (
-                <LoadingBox></LoadingBox>
-            ) : error ? (
-                <MessageBox variant="danger">{error}</MessageBox>
-            ) : (
-                <div className="row center">
-                    {products.map((my_product) => (
-                        <Product
-                            key={my_product._id}
-                            set_product={my_product}
-                        ></Product>
-                    ))}
-                </div>
-            )}
+  useEffect(() => {
+    dispatch(listProducts());
+  }, [dispatch]);
+
+  return (
+    <div>
+      {loading ? (
+        <LoadingBox></LoadingBox>
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+        <div className="row center">
+          {products.map((product) => (
+            <Product key={product._id} product={product}></Product>
+          ))}
         </div>
-    );
+      )}
+    </div>
+  );
 }

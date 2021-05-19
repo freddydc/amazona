@@ -56,8 +56,8 @@ export default function ProductScreen(props) {
                 </li>
                 <li>
                   <Rating
-                    set_rating={product.rating}
-                    set_numReviews={product.numReviews}
+                    rating={product.rating}
+                    numReviews={product.numReviews}
                   ></Rating>
                 </li>
                 <li>price: $ {product.price}</li>
@@ -95,7 +95,7 @@ export default function ProductScreen(props) {
                         <div className="row">
                           <div>Quantity</div>
                           <div>
-                            {/* 
+                            {/*
                             // TODO: Learn tag 'select' onChange has fun 'e' event target.
                             */}
                             <select

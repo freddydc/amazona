@@ -23,7 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 robots.txt
-README.md
 frontend/package-lock.json
 # template/args.js
 package-lock.json

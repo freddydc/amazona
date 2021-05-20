@@ -3,7 +3,6 @@ html {
   font-size: 62.5%;
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
   height: 100vh;
@@ -17,7 +16,7 @@ body {
   height: 100%;
 }
 
-/* Layout */
+/** ==> Layout <== */
 .grid-container {
   display: grid;
   grid-template-areas: "header" "main" "footer";
@@ -25,25 +24,22 @@ body {
   grid-template-rows: 5rem 1fr 5rem;
   height: 100%;
 }
-
 header {
   grid-area: header;
   background-color: #203040;
 }
-
 main {
   grid-area: main;
   padding: 1rem;
 }
-
 footer {
   grid-area: footer;
   background-color: #203040;
   color: #ffffff;
 }
-/* End: layout */
+/** (End) Layout */
 
-/* Common */
+/* ==> Common <== */
 h1 {
   font-size: 1.8rem;
   padding: 1rem 0;
@@ -52,22 +48,18 @@ h2 {
   font-size: 1.6rem;
   padding: 1rem 0;
 }
-
 a {
   text-decoration: none;
 }
-
-/** "Hover" muestra el color "naranja" al pasar el cursor sobre el text */
+/*? Info: (hover) show the orange color to hovering over text. */
 a:hover {
   color: #ff8000;
 }
-
 ul {
   padding: 0;
   margin: 0;
   list-style-type: none;
 }
-
 li {
   margin-top: 1rem;
 }
@@ -84,13 +76,11 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-/** Button "add to cart" */
+/*? Button Add to Cart */
 button {
   background-color: #f8f8f8;
   cursor: pointer;
 }
-/** End: button "add to cart" */
 
 input:hover,
 select:hover,
@@ -102,25 +92,22 @@ button:hover {
 button.primary {
   background-color: #f0c040;
 }
-
 button.block {
   width: 100%;
 }
-/* End: common */
+/* (End) common */
 
-/* Header */
+/** ==> Header <== */
 header a {
   color: #ffffff;
   padding: 1rem;
 }
-
 a.brand {
   color: #ffffff;
   font-size: 3rem;
   font-weight: bold;
 }
-
-/* cart item add 'badge'  */
+/*? Cart Item Add (badge)  */
 .badge {
   background-color: #f02020;
   color: #ffffff;
@@ -129,7 +116,6 @@ a.brand {
   font-size: 1.4rem;
   margin-left: 0.4rem;
 }
-/* End: cart item add 'badge' */
 
 .row {
   display: flex;
@@ -137,119 +123,103 @@ a.brand {
   justify-content: space-between;
   align-items: center;
 }
-
 .row.center {
   justify-content: center;
 }
-/* End: header */
+/** (End) Header */
 
-/* ProductScreen */
+/* ==> Product Screen <== */
 .row.top {
   align-items: flex-start;
 }
-
 .col-1 {
   flex: 1 1 25rem;
 }
-
 .col-2 {
   flex: 2 1 50rem;
   margin: 1.8rem;
 }
-/* End: ProductScreen */
+/* (End) Product Screen */
 
-/* Shipping cart product name */
+/** ==> Shipping Cart Product Name <== */
 .min-30 {
   min-width: 30rem;
 }
-/* End: Shipping cart product name */
+/** (End) Shipping Cart Product Name */
 
-/** Image */
+/* ==> Image <== */
 img {
   border-radius: 0.5rem;
 }
-
-/* Shipping cart image */
+/* Shipping Cart Image */
 img.small {
   max-width: 5rem;
   width: 100%;
 }
-/* End: Shipping cart image */
-
 img.medium {
   max-width: 29rem;
   width: 100%;
 }
-
 /* Image Product Screen */
 img.large {
   width: 100%;
 }
-/* End: image Product Screen */
+/* (End) Image */
 
-/** End: image */
-
-/* Card */
+/** ==> Card <== */
 .card {
   border: 0.1rem #c0c0c0 solid;
   background-color: #f8f8f8;
   border-radius: 0.5rem;
   margin: 1rem;
 }
-
 .card-body {
   padding: 1rem;
 }
-
 .card-body > * {
   margin-bottom: 0.5rem;
 }
-
 .price {
   font-size: 2rem;
 }
-/* End: card */
+/** (End) card */
 
-/* Rating stars icons */
+/* ==> Rating Stars Icon <== */
 .rating span {
   color: #f0c040;
   margin: 0.1rem;
 }
-
 .rating span:last-child {
   color: #404040;
 }
-/* End: rating star icons */
+/* (End) Rating Stars Icon */
 
-/* Alert ProductScreen */
+/** ==> Alert Product Screen <== */
 .success {
   color: #20a020;
 }
-
 .danger {
   color: #a02020;
 }
-/* End: Alert ProductScreen */
+/** (End) Alert Product Screen */
 
-/*? Alert "MessageBox" */
+/* ==> Alert Message Box <== */
 .alert {
   padding: 1rem;
   border: 0.1rem solid transparent;
   border-radius: 0.5rem;
 }
-
 .alert-info {
   color: #2020a0;
   background-color: #e0e0ff;
 }
-
 .alert-danger {
   color: #a02020;
   background-color: #ffe0e0;
 }
-/*? End: Alert "MessageBox" */
+/* (End) Alert Message Box */
 
-/* Spinner "LoadingBox" */
+/** ==> Spinner Loading Box <== */
 .spinner span {
   display: flex;
   flex-wrap: wrap;
@@ -257,21 +227,35 @@ img.large {
   color: #ff8000;
   margin: 1.5rem;
 }
-
 .spinner span:last-child {
   font-size: 1.5rem;
   color: #404040;
 }
-/* Spinner "LoadingBox" */
+/** Spinner Loading Box */
 
-/* Back to Home "Message" */
+/* ==> Back to Home Message <== */
 .back-home span {
   font-size: 1.5rem;
   color: #404040;
   margin: 0.2rem;
 }
-
 .back-home span:last-child:hover {
   font-size: 1.6rem;
 }
-/* End:  Back to Home "Message" */
+/* (End)  Back to Home Message */
+
+/** ==> Signin Form <== */
+.form {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+.form > div {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+.form label {
+  margin: 1rem 0;
+  display: block;
+}
+/** (End) Signin Form */

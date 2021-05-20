@@ -4,12 +4,13 @@ import { BrowserRouter, Link, Route } from "react-router-dom";
 import CartScreen from "./screens/CartScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
+import SigninScreen from "./screens/SigninScreen";
 
 function App() {
-  //* Get access to the 'cart items' from redux store.
+  // Get access to the (cart items) from redux store.
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-  //! Console
+  //! Info
   console.log("cart items:", cartItems.length, cartItems);
 
   return (
@@ -22,7 +23,7 @@ function App() {
             </Link>
           </div>
           <div>
-            {/* Badge cart add item, for view 'qty' icon */}
+            {/* (Badge) cart add item, for view (qty icon) */}
             <Link to="/cart">
               Cart
               {cartItems.length > 0 && (
@@ -32,14 +33,16 @@ function App() {
             <Link to="/signin">Sign In</Link>
           </div>
         </header>
+        {/*
+        Nota: (exact), if url is exact to (/), render (HomeScreen).
+        Nota: (/cart/:id?) the last (?) in (/:id?),
+        ... for view (localhost:3000/cart/3?qty=8) in URL.
+        */}
         <main>
-          {/*
-          //? Note: "exact", si url is exact to "/", render "HomeScreen"
-          //? Note: '/cart/:id?' the last '?' in '/:id?', for view "localhost:3000/cart/3?qty=8" in URL.
-          */}
           <Route path="/cart/:id?" component={CartScreen}></Route>
-          <Route path="/" component={HomeScreen} exact></Route>
           <Route path="/product/:id" component={ProductScreen}></Route>
+          <Route path="/signin" component={SigninScreen}></Route>
+          <Route path="/" component={HomeScreen} exact></Route>
         </main>
         <footer className="row center">All right reserved</footer>
       </div>

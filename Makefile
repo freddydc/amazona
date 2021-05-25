@@ -133,10 +133,10 @@ rm-img:
 dcm-ps:
 	${compose} ps
 # Production.
-up:
+up-prod:
 	${compose} up -d
 # Development.
-up-dev:
+up:
 	${compose} -f ${composeFile} up
 
 dcm-stop:

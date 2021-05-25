@@ -1,17 +1,32 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Link, Route } from "react-router-dom";
+import { signOut } from "./actions/userActions";
 import CartScreen from "./screens/CartScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import SigninScreen from "./screens/SigninScreen";
 
+/* ==> <Route></Route> <==
+? - (exact), if url is exact to (/), render (HomeScreen).
+* - (/cart/:id?) the last (?) in (/:id?),
+*     for view (localhost:3000/cart/3?qty=8) on browser (CartScreen).
+*/
 function App() {
-  // Get access to the (cart items) from redux store.
+  //* - Getting access to (data info it contain) from (redux store).
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-  //! Info
-  console.log("cart items:", cartItems.length, cartItems);
+
+  //! info.
+  // console.log("cart items:", cartItems.length, cartItems);
+
+  const userSignIn = useSelector((state) => state.userSignIn);
+  const { userInfo } = userSignIn;
+
+  const dispatch = useDispatch();
+  const signOutHandler = () => {
+    dispatch(signOut());
+  };
 
   return (
     <BrowserRouter>
@@ -23,21 +38,34 @@ function App() {
             </Link>
           </div>
           <div>
-            {/* (Badge) cart add item, for view (qty icon) */}
+            {/* (Badge Cart) add item, for view quantity icon. */}
             <Link to="/cart">
               Cart
               {cartItems.length > 0 && (
                 <span className="badge">{cartItems.length}</span>
               )}
             </Link>
-            <Link to="/signin">Sign In</Link>
+            {userInfo ? (
+              <div className="dropdown">
+                {/* User Name Menu */}
+                <Link to="#">
+                  {userInfo.name} <i className="fas fa-caret-down"></i>
+                </Link>
+                <ul className="dropdown-content">
+                  {/* Sign Out Menu */}
+                  <li>
+                    <Link to="#signout" onClick={signOutHandler}>
+                      Sign Out
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              //? - Sign In Menu
+              <Link to="/signin">Sign In</Link>
+            )}
           </div>
         </header>
-        {/*
-        Nota: (exact), if url is exact to (/), render (HomeScreen).
-        Nota: (/cart/:id?) the last (?) in (/:id?),
-        ... for view (localhost:3000/cart/3?qty=8) in URL.
-        */}
         <main>
           <Route path="/cart/:id?" component={CartScreen}></Route>
           <Route path="/product/:id" component={ProductScreen}></Route>

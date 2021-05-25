@@ -1,6 +1,6 @@
 # React E-Commerce Website
 
-Welcome to my NodeJS and React e-commerce website using ( `MongoDB`, `React`, `NodeJS`, `ExpressJS` and `Docker` ).
+Welcome to NodeJS and React e-commerce website using ( `MongoDB`, `React`, `NodeJS`, `ExpressJS` and `Docker` ).
 
 ## Run Locally
 
@@ -12,13 +12,13 @@ git clone https://github.com/freddydc/amazona.git
 
 ### 2. Setup Backend And Frontend
 
-Run `npm` command within the `root` folder to install development tools.
+Run `npm install` inside `root` to install necessary development tools.
 
 ```
 npm install
 ```
 
-Run `npm` command within the `backend` to install tools and run server:
+Run `npm install` inside backend:
 
 ```
 cd backend
@@ -32,7 +32,7 @@ npm install
 npm start
 ```
 
-Run `npm` command within the `frontend` to install tools and run frontend:
+Run `npm install` inside frontend:
 
 ```
 cd frontend
@@ -48,17 +48,17 @@ npm start
 
 ### 3. Seed Users And Products
 
-- Run this on chrome: http://localhost:5000/api/users/seed
-- It returns admin `email` and `password`
-- Run this on chrome: http://localhost:5000/api/products/seed
-- It creates 6 sample `products`
+-   Run this on chrome: http://localhost:5000/api/users/seed
+-   It returns admin `email` and `password`
+-   Run this on chrome: http://localhost:5000/api/products/seed
+-   It creates 6 sample `products`
 
-## Run With Docker
+## Run Docker
 
-### 1. Setup Docker
+### 2. Run Services
 
-Run the `make` command within the `root` folder:
+Run `make up` inside `root` to start services:
 
 ```
-make up-dev
+make up
 ```

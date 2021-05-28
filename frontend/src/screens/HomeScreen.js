@@ -6,11 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../actions/productActions";
 
 export default function HomeScreen() {
-  /*
-  ? Get "productList" data from redux "src/store.js"
-  * "loading", "error", "products", to get data from "store.js".
+  /* ==> product-list <==
+  ? - Get (Product List) data from redux (src/store.js).
+  * - Data (loading, error, products), from (store.js).
   */
-
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
   const { loading, error, products } = productList;

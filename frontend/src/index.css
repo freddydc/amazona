@@ -37,7 +37,7 @@ footer {
   background-color: #203040;
   color: #ffffff;
 }
-/** (End) Layout */
+/** (==> End: Layout <==) */
 
 /* ==> Common <== */
 h1 {
@@ -95,7 +95,7 @@ button.primary {
 button.block {
   width: 100%;
 }
-/* (End) common */
+/* (==> End: Common <==) */
 
 /** ==> Header <== */
 header a {
@@ -126,7 +126,7 @@ a.brand {
 .row.center {
   justify-content: center;
 }
-/** (End) Header */
+/** (==> End: Header <==) */
 
 /* ==> Product Screen <== */
 .row.top {
@@ -139,13 +139,13 @@ a.brand {
   flex: 2 1 50rem;
   margin: 1.8rem;
 }
-/* (End) Product Screen */
+/* (==> End: Product Screen <==) */
 
-/** ==> Shipping Cart Product Name <== */
+/** ==> Shipping Cart Item Name <== */
 .min-30 {
   min-width: 30rem;
 }
-/** (End) Shipping Cart Product Name */
+/** (==> End: Shipping Cart Item Name <==) */
 
 /* ==> Image <== */
 img {
@@ -164,7 +164,7 @@ img.medium {
 img.large {
   width: 100%;
 }
-/* (End) Image */
+/* (==> End: Image <==) */
 
 /** ==> Card <== */
 .card {
@@ -182,9 +182,9 @@ img.large {
 .price {
   font-size: 2rem;
 }
-/** (End) card */
+/** (==> End: Card <==) */
 
-/* ==> Rating Stars Icon <== */
+/* ==> Rating Stars <== */
 .rating span {
   color: #f0c040;
   margin: 0.1rem;
@@ -192,18 +192,22 @@ img.large {
 .rating span:last-child {
   color: #404040;
 }
-/* (End) Rating Stars Icon */
+/* (==> End: Rating Stars <==) */
 
-/** ==> Alert Product Screen <== */
+/** ==> Alert <== */
+/*? ==> Prevent moving around spinner for loading */
+.loading {
+  display: block !important;
+}
 .success {
   color: #20a020;
 }
 .danger {
   color: #a02020;
 }
-/** (End) Alert Product Screen */
+/** (==> End: Alert <==) */
 
-/* ==> Alert Message Box <== */
+/* ==> Alert Message <== */
 .alert {
   padding: 1rem;
   border: 0.1rem solid transparent;
@@ -217,9 +221,9 @@ img.large {
   color: #a02020;
   background-color: #ffe0e0;
 }
-/* (End) Alert Message Box */
+/* (==> End: Alert Message <==) */
 
-/** ==> Spinner Loading Box <== */
+/** ==> Loading Spinner <== */
 .spinner span {
   display: flex;
   flex-wrap: wrap;
@@ -231,9 +235,9 @@ img.large {
   font-size: 1.5rem;
   color: #404040;
 }
-/** Spinner Loading Box */
+/** (==> End: Loading Spinner <==) */
 
-/* ==> Back to Home Message <== */
+/* ==> Back Home Message <== */
 .back-home span {
   font-size: 1.5rem;
   color: #404040;
@@ -242,7 +246,7 @@ img.large {
 .back-home span:last-child:hover {
   font-size: 1.6rem;
 }
-/* (End)  Back to Home Message */
+/* (==> End:  Back Home Message <==) */
 
 /** ==> Signin Form <== */
 .form {
@@ -258,7 +262,7 @@ img.large {
   margin: 1rem 0;
   display: block;
 }
-/** (End) Signin Form */
+/** (==> End: Signin Form <==) */
 
 /* ==> User Dropdown Menu <== */
 .dropdown {
@@ -280,4 +284,4 @@ img.large {
 .dropdown:hover .dropdown-content {
   display: block;
 }
-/* (END) User Dropdown Menu */
+/* (==> End: User Dropdown Menu <==) */

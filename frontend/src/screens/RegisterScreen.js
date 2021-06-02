@@ -1,39 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { signIn } from "../actions/userActions";
+import { register } from "../actions/userActions";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 
-export default function SigninScreen(props) {
+export default function RegisterScreen(props) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  /* ==> redirect <==
-  * - Query String: localhost:3000/signin?redirect=shipping
-  ? - For redirect need check (query string).
-  * - Split by (?) question mark.
-  */
   const redirect = props.location.search
     ? props.location.search.split("=")[1]
     : "/";
-  //! info.
-  // console.log(redirect);
 
-  const userSignIn = useSelector((state) => state.userSignIn);
-  const { userInfo, loading, error } = userSignIn;
+  const userRegister = useSelector((state) => state.userRegister);
+  const { userInfo, loading, error } = userRegister;
 
   const dispatch = useDispatch();
-  /* ==> prevent method <==
-  TODO: - Learn method (preventDefault).
-  */
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(signIn(email, password));
+    if (password !== confirmPassword) {
+      alert("Password and confirm password are not match");
+    } else {
+      dispatch(register(name, email, password));
+    }
   };
 
   useEffect(() => {
-    //* ==> If (user-login) is success url redirect by (redirect-define).
     if (userInfo) {
       props.history.push(redirect);
     }
@@ -42,16 +37,26 @@ export default function SigninScreen(props) {
   return (
     <div>
       <form className="form" onSubmit={submitHandler}>
-        {/* Title */}
         <div>
-          <h1>Sign In</h1>
+          <h1>Create Account</h1>
         </div>
         {/* Messages */}
         {loading && <LoadingBox></LoadingBox>}
         {error && <MessageBox varian="danger">{error}</MessageBox>}
+        {/* Name */}
+        <div>
+          {/* (tag <input> id=name) connect with (tag <label> htmlFor=name) */}
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            placeholder="Enter name"
+            required
+            onChange={(e) => setName(e.target.value)}
+          ></input>
+        </div>
         {/* Email */}
         <div>
-          {/* (tag <input> id=email) connect with (tag <label> htmlFor=email) */}
           <label htmlFor="email">Email address</label>
           <input
             type="email"
@@ -72,22 +77,30 @@ export default function SigninScreen(props) {
             onChange={(e) => setPassword(e.target.value)}
           ></input>
         </div>
-        {/* Sign-In */}
+        {/* Confirm Password */}
         <div>
-          <label />
-          {/* Click on button (submitHandler fun-run) */}
-          <button className="primary" type="submit">
-            Sign In
-          </button>
+          <label htmlFor="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Enter confirm password"
+            required
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          ></input>
         </div>
         {/* Sign-Up */}
         <div>
           <label />
+          <button className="primary" type="submit">
+            Register
+          </button>
+        </div>
+        {/* Sign-In */}
+        <div>
+          <label />
           <div>
-            New customer?{" "}
-            <Link to={`/register?redirect=${redirect}`}>
-              Create your account
-            </Link>
+            Already have an account?{" "}
+            <Link to={`/signin?redirect=${redirect}`}>Sign In</Link>
           </div>
         </div>
       </form>

@@ -1,17 +1,15 @@
 import React from "react";
 
+/* ==> spinner-icon <==
+? - Animating spinner with: (fa-spin, fa-pulse), size icon: (fa-lg)
+*/
 export default function LoadingBox() {
   return (
-    <div>
-      {/*
-      Animating icon spinner with: (fa-spin, fa-pulse), size icon: (fa-lg).
-      */}
-      <div className="spinner">
-        <span>
-          <i className="fas fa-spinner fa-pulse fa-lg"></i>
-        </span>
-        <span>Loading ...</span>
-      </div>
+    <div className="spinner loading">
+      <span>
+        <i className="fas fa-spinner fa-pulse fa-lg"></i>
+      </span>
+      <span>Loading...</span>
     </div>
   );
 }

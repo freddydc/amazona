@@ -5,14 +5,17 @@ import {
   productDetailsReducer,
   productListReducer,
 } from "./reducers/productReducers";
-import { userSignInReducer } from "./reducers/userReducers";
+import {
+  userRegisterReducer,
+  userSignInReducer,
+} from "./reducers/userReducers";
 
-//* - Initial (redux store) state on (Local Storage).
+/* ==> (redux-store) initial state on (local-storage) <==
+* == cart ==
+? - Default data for (cart) by (local storage) opening browser again.
+* - getItem: using (key name cartItems), by cart action.
+*/
 const initialState = {
-  /* ==> cart <==
-  ? - Default data for (cart) by (local storage) opening browser again.
-  * - getItem: using (key name cartItems), by cart action.
-  */
   userSignIn: {
     userInfo: localStorage.getItem("userInfo")
       ? JSON.parse(localStorage.getItem("userInfo"))
@@ -24,32 +27,31 @@ const initialState = {
       : [],
   },
 };
-
-/* ==> sample <==
-? - Use without (reducers), need import (data.js by front)
+/* ==> without-reducer <==
+? - For use without (reducers), need import (data.js by front)
 *     for return (state) = products.
 ? - state: before = (empty), later have: (products data).
-* - action: type = (@INIT).
+* - action: type = (@Init).
 
   const reducer = (state, action) => {
     return { products: data.products };
   };
 */
 
-//? - Redux store for (reducers).
+//? ==> Redux-Store for combine (reducers).
 const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
   cart: cartReducer,
   userSignIn: userSignInReducer,
+  userRegister: userRegisterReducer,
 });
 
-/* <== compose fun <==
+/* <== compose-fun <==
 ? - (composeEnhancer) upgrade default (compose redux fun),
 *     to show (redux store) on (browser) plugin.
 */
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 const store = createStore(
   reducer,
   initialState,

@@ -5,20 +5,20 @@ import { signOut } from "./actions/userActions";
 import CartScreen from "./screens/CartScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 import SigninScreen from "./screens/SigninScreen";
 
-/* ==> <Route></Route> <==
-? - (exact), if url is exact to (/), render (HomeScreen).
-* - (/cart/:id?) the last (?) in (/:id?),
-*     for view (localhost:3000/cart/3?qty=8) on browser (CartScreen).
+/* ==> tag <Route> <==
+? - <Route exact> if url is exact to (/) render (Home-Screen).
+* - (/cart/:id?) the last (?) in (/:id?) for view
+*     (localhost:3000/cart/3?qty=8) on browser (Cart-Screen).
 */
 function App() {
-  //* - Getting access to (data info it contain) from (redux store).
+  //? ==> Get access to (data info it contain) by (redux-store).
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-
   //! info.
-  // console.log("cart items:", cartItems.length, cartItems);
+  // console.log(`cart items: ${cartItems.length} ${cartItems}`);
 
   const userSignIn = useSelector((state) => state.userSignIn);
   const { userInfo } = userSignIn;
@@ -38,7 +38,7 @@ function App() {
             </Link>
           </div>
           <div>
-            {/* (Badge Cart) add item, for view quantity icon. */}
+            {/* (Badge-Add-Cart-Item) for show quantity (icon) */}
             <Link to="/cart">
               Cart
               {cartItems.length > 0 && (
@@ -52,7 +52,7 @@ function App() {
                   {userInfo.name} <i className="fas fa-caret-down"></i>
                 </Link>
                 <ul className="dropdown-content">
-                  {/* Sign Out Menu */}
+                  {/* Sign-Out Menu */}
                   <li>
                     <Link to="#signout" onClick={signOutHandler}>
                       Sign Out
@@ -61,7 +61,7 @@ function App() {
                 </ul>
               </div>
             ) : (
-              //? - Sign In Menu
+              //? ==> Sign-In Menu.
               <Link to="/signin">Sign In</Link>
             )}
           </div>
@@ -70,6 +70,7 @@ function App() {
           <Route path="/cart/:id?" component={CartScreen}></Route>
           <Route path="/product/:id" component={ProductScreen}></Route>
           <Route path="/signin" component={SigninScreen}></Route>
+          <Route path="/register" component={RegisterScreen}></Route>
           <Route path="/" component={HomeScreen} exact></Route>
         </main>
         <footer className="row center">All right reserved</footer>

@@ -5,23 +5,17 @@ import data from "../data.js";
 import User from "../models/userModel.js";
 import { generateToken } from "../utils.js";
 
-/*
-? Nota:
-* Get method create (/seed) API and create two (users) sample.
-? For get errors message use: (express-async-handler) library.
-
-* Express Async Handler: send errors messages to (middleware),
-* ... defined in (server file) error catcher.
-
-TODO: Learn because mongoose operation: use 'async' function.
-? User insertMany(): accept an (array) collection.
-
-* Nota: (createdUsers) = insert (users data) collection in mongodb.
-
-TODO: Learn remove (old) mongodb data using:
-* ... await User.remove({});
+/* ==> user-router <==
+* - Get method (/seed API) and create two sample (users).
+? - For get errors message use: (express-async-handler) library.
+* - Express-Async-Handler: send errors messages to (middleware),
+* -   defined on (server-file) error catcher.
+TODO: ==> Learn because mongoose operation: use (async function).
+? - User insertMany(): accept an (array) collection.
+* - Nota: (createdUsers) = insert (users data) collection in mongodb.
+TODO: ==> Learn remove (old) mongodb data using:
+* ==> await User.remove({});
 */
-
 const userRouter = express.Router();
 
 userRouter.get(
@@ -36,9 +30,8 @@ userRouter.get(
 userRouter.post(
   "/signin",
   expressAsyncHandler(async (req, res) => {
-    //* Compare email in mongodb.
+    //? ==> (Compare email) on mongodb.
     const user = await User.findOne({ email: req.body.email });
-
     if (user) {
       if (bcrypt.compareSync(req.body.password, user.password)) {
         res.send({
@@ -52,6 +45,26 @@ userRouter.post(
       }
     }
     res.status(401).send({ message: "Invalid email or password" });
+  })
+);
+
+userRouter.post(
+  "/register",
+  expressAsyncHandler(async (req, res) => {
+    const user = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+    });
+    //* ==> Call save and create (new user).
+    const createdUser = await user.save();
+    res.send({
+      _id: createdUser._id,
+      name: createdUser.name,
+      email: createdUser.email,
+      isAdmin: createdUser.isAdmin,
+      token: generateToken(createdUser),
+    });
   })
 );
 

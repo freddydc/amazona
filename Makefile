@@ -16,8 +16,8 @@ API_PORT = 5000:5000
 FRONT_PORT = 3000:3000
 DB_PORT = 27017:27017
 # ==> Production Image Tags <==
-SERVER = backend:v0.1.0
-FRONT = frontend:v0.1.0
+SERVER = api:v0.1.0
+FRONT = storefront:v0.1.0
 # ==> Development Image tags <==
 serverDev = backend
 frontDev = frontend
@@ -62,11 +62,11 @@ ps:
 	${docker} ps -a
 psl:
 	${docker} ps -l
-nt-ls:
+nls:
 	${docker} network ls
-nt-ins:
+nin:
 	${docker} network inspect ${storeNetwork}
-vl-ls:
+vls:
 	${docker} volume ls
 # ==> Production Tags <==
 tg-p:
@@ -82,7 +82,7 @@ push:
 img:
 	${docker} images
 # Development
-dv-server-d:
+dv-api-d:
 	${docker} run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
     ${DIVE} ${serverDev}
@@ -91,7 +91,7 @@ dv-front-d:
     -v /var/run/docker.sock:/var/run/docker.sock \
     ${DIVE} ${frontDev}
 # Production
-dv-server:
+dv-api:
 	${docker} run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
     ${DIVE} ${SERVER}
@@ -100,7 +100,7 @@ dv-front:
     -v /var/run/docker.sock:/var/run/docker.sock \
     ${DIVE} ${FRONT}
 # ==> Image Cleaner <==
-rm-server:
+rm-api:
 	${docker} rmi ${SERVER}
 rm-front:
 	${docker} rmi ${FRONT}
@@ -108,7 +108,7 @@ rm-front:
 rm-img-d:
 	${docker} rmi ${serverDev} ${frontDev}
 # Production.
-rm-img:
+rmi:
 	${docker} rmi ${SERVER} ${FRONT}
 # ==> Docker Compose <==
 cps:
@@ -138,7 +138,7 @@ dc-build:
 dc-build-d:
 	${compose} -f ${composeFile} build
 # ==> Manually Runner: (mongo - api - front) <==
-run-mnl:
+run-m:
 	${docker} network create --attachable ${testNet} || ${netInfo}
 
 	${docker} run -d --name mongo --rm -p ${DB_PORT} \
@@ -162,7 +162,7 @@ run-api:
 run-front:
 	${docker} run --name front --rm -p ${FRONT_PORT} ${FRONT}
 # ==> Exec Containers <==
-e-mg:
+emg:
 	${docker} exec -it mongo bash
 e-api:
 	${docker} exec -it api sh
@@ -171,20 +171,20 @@ e-front:
 # ==> Cleaner <==
 pr:
 	${docker} system prune
-img-pr:
+ipr:
 	${docker} image prune
 # Container: Stop And Remove.
-ct-pr:
+cpr:
 	${docker} container prune
-ct-stop:
+cst:
 	${docker} stop `${docker} ps -aq` || ${ctInfo}
-ct-rm:
+crm:
 	${docker} rm $$(${docker} ps -a -q) || ${ctInfo}
-# Clear all containers.
-ct-clr: ct-stop ct-rm
-vl-pr:
+# Remove all containers.
+rac: ct-stop ct-rm
+vpr:
 	${docker} volume prune
-nt-pr:
+npr:
 	${docker} network prune
 rm-mg-vl:
 	${docker} volume rm ${mgData}

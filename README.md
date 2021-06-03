@@ -50,7 +50,7 @@ npm install
 npm start
 ```
 
-### 3. Seed Users And Products
+### 5. Seed Users And Products
 
 -   Run this on browser: http://localhost:5000/api/users/seed
 -   It returns admin `email` and `password`

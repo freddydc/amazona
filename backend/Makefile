@@ -1,50 +1,46 @@
-# --> Production And Development Image Builder.
-# Development.
-dev-build:
-	sudo docker build -t backend-dev -f Dockerfile.dev .
-# Production.
-prod-build:
-	sudo docker build -t backend .
-# Run Containers Port.
-ru-api-dev:
-	cd ../ && $(MAKE) run-api-dev
-ru-api-prod:
-	cd ../ && $(MAKE) run-api-prod
-# Remove Image.
-rm-img:
-	sudo docker rmi backend
+d-build:
+	sudo docker build -t backend -f Dockerfile.dev .
+p-build:
+	sudo docker build -t api:v0.1.0 .
 
-# --> Docker Commands.
+run-api-d:
+	cd ../ && $(MAKE) run-api-d
+run-api:
+	cd ../ && $(MAKE) run-api
+
+rmi:
+	sudo docker rmi backend
 img:
 	cd ../ && $(MAKE) img
+
 ps:
 	cd ../ && $(MAKE) ps
-nt-ls:
-	cd ../ && $(MAKE) nt-ls
+nls:
+	cd ../ && $(MAKE) nls
 
-e-mongo:
-	cd ../ && $(MAKE) e-mongo
-e-api-dev:
-	cd ../ && $(MAKE) e-api-dev
-e-front-dev:
-	cd ../ && $(MAKE) e-front-dev
+emg:
+	cd ../ && $(MAKE) emg
+e-api:
+	cd ../ && $(MAKE) e-api
+e-front:
+	cd ../ && $(MAKE) e-front
 
 pr:
 	cd ../ && $(MAKE) pr
-img-pr:
-	cd ../ && $(MAKE) img-pr
-c-pr:
-	cd ../ && $(MAKE) c-pr
-v-pr:
-	cd ../ && $(MAKE) v-pr
-nt-pr:
-	cd ../ && $(MAKE) nt-pr
+ipr:
+	cd ../ && $(MAKE) ipr
+cpr:
+	cd ../ && $(MAKE) cpr
+vpr:
+	cd ../ && $(MAKE) vpr
+npr:
+	cd ../ && $(MAKE) npr
 
-up-dev:
-	cd ../ && $(MAKE) up-dev
-up-prod:
-	cd ../ && $(MAKE) up-prod
-dcm-stop:
-	cd ../ && $(MAKE) dcm-stop
-dcm-down:
-	cd ../ && $(MAKE) dcm-down
+up:
+	cd ../ && $(MAKE) up
+up-p:
+	cd ../ && $(MAKE) up-p
+dcs:
+	cd ../ && $(MAKE) dcs
+dcd:
+	cd ../ && $(MAKE) dcd

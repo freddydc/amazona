@@ -1,26 +1,38 @@
 import { CART_ADD_ITEM, CART_REMOVE_ITEM } from "../constants/cartConstants";
 
+/* ==> (cart) actions <==
+* ==> case: CART_ADD_ITEM <==
+? ==> (make sure) item data.
+* - Make sure if already the (item) exist in (cart-items).
+* - (id = product): Make sure if already item (id)
+*     is added into (cart-items).
+
+? ==> if (exist-item) condition.
+* - Already (exist-item) is has added into (cart-items).
+* - Updating old (cart-items) data information
+*     with new (item) data.
+* - (cart-items): Not change any items only update
+*     already exists (item).
+* - (x = previous) and (item = new) value information.
+
+? ==> else (exist-item) condition.
+* - Item is new and not exist in (cart-items).
+* - Inside: [...state.cartItems, item ] merge old (cart-items)
+*     with new (item) data information.
+* - Adding (new item) if (cart-items) is empty.
+
+* ==> case: CART_REMOVE_ITEM <==
+? - From (remove-from-cart) action defined get
+*     an item with (id = action.payload) for remove.
+*/
 export const cartReducer = (state = { cartItems: [] }, action) => {
   switch (action.type) {
     case CART_ADD_ITEM:
-      /*
-      ? Note:
-      * Make sure if already the 'item' exist in 'cart items'
-      * 'id' = product: Make sure if already Item 'id' added into 'cart items'.
-      */
       const item = action.payload;
       const existItem = state.cartItems.find((x) => x.product === item.product);
-      //! Console
-      console.log("existItem:", existItem);
-
-      //* If already item has added into cart items.
+      //! Info.
+      // console.log(`Exist item: ${existItem}`);
       if (existItem) {
-        /*
-        ? Note:
-        * Updating 'cartItems' with new 'item'.
-        ? cartItems: Not change any items, only updated already exists 'item'.
-        * "x" previous value & "item" new value.
-        */
         return {
           ...state,
           cartItems: state.cartItems.map((x) =>
@@ -28,19 +40,9 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
           ),
         };
       } else {
-        /*
-        ? Note:
-        * If item is 'new' and not exist in cart items.
-        ? Inside [ ...state.cartItems, item ], merge: 'cartItems' & 'item'.
-        * Adding new 'item' to empty 'cart items'.
-        */
         return { ...state, cartItems: [...state.cartItems, item] };
       }
     case CART_REMOVE_ITEM:
-      /*
-      ? Nota:
-      * From 'Remove From Cart' action defined get item, 'id = action.payload'.
-      */
       return {
         ...state,
         cartItems: state.cartItems.filter((x) => x.product !== action.payload),

@@ -1,5 +1,5 @@
 html {
-  /* 16px x 62.5 = 10px = 1rem */
+  /* ? ==> 16px x 62.5 = 10px = 1rem */
   font-size: 62.5%;
   box-sizing: border-box;
 }
@@ -11,12 +11,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 #root {
   height: 100%;
 }
-
-/** ==> Layout <== */
+/* * ==> Layout <== */
 .grid-container {
   display: grid;
   grid-template-areas: "header" "main" "footer";
@@ -37,8 +35,7 @@ footer {
   background-color: #203040;
   color: #ffffff;
 }
-/** (==> End: Layout <==) */
-
+/* * (End: == Layout ==) */
 /* ==> Common <== */
 h1 {
   font-size: 1.8rem;
@@ -51,7 +48,7 @@ h2 {
 a {
   text-decoration: none;
 }
-/*? Info: (hover) show the orange color to hovering over text. */
+/* ? ==> (hover) show the orange color to hovering over text. */
 a:hover {
   color: #ff8000;
 }
@@ -76,7 +73,7 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/*? Button Add to Cart */
+/* ? ==> Button Add to Cart */
 button {
   background-color: #f8f8f8;
   cursor: pointer;
@@ -88,16 +85,14 @@ textarea:hover,
 button:hover {
   border: 0.1rem #404040 solid;
 }
-
 button.primary {
   background-color: #f0c040;
 }
 button.block {
   width: 100%;
 }
-/* (==> End: Common <==) */
-
-/** ==> Header <== */
+/* (End: == Common ==) */
+/* * ==> Header <== */
 header a {
   color: #ffffff;
   padding: 1rem;
@@ -107,7 +102,7 @@ a.brand {
   font-size: 3rem;
   font-weight: bold;
 }
-/*? Cart Item Add (badge)  */
+/* ? ==> Cart Item Add (badge)  */
 .badge {
   background-color: #f02020;
   color: #ffffff;
@@ -116,7 +111,6 @@ a.brand {
   font-size: 1.4rem;
   margin-left: 0.4rem;
 }
-
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -126,8 +120,7 @@ a.brand {
 .row.center {
   justify-content: center;
 }
-/** (==> End: Header <==) */
-
+/* * (End: == Header ==) */
 /* ==> Product Screen <== */
 .row.top {
   align-items: flex-start;
@@ -139,14 +132,12 @@ a.brand {
   flex: 2 1 50rem;
   margin: 1.8rem;
 }
-/* (==> End: Product Screen <==) */
-
-/** ==> Shipping Cart Item Name <== */
+/* (End: == Product Screen ==) */
+/* * ==> Shipping Cart Item Name <== */
 .min-30 {
   min-width: 30rem;
 }
-/** (==> End: Shipping Cart Item Name <==) */
-
+/* * (End: == Shipping Cart Item Name ==) */
 /* ==> Image <== */
 img {
   border-radius: 0.5rem;
@@ -164,9 +155,8 @@ img.medium {
 img.large {
   width: 100%;
 }
-/* (==> End: Image <==) */
-
-/** ==> Card <== */
+/* (End: == Image ==) */
+/* * ==> Card <== */
 .card {
   border: 0.1rem #c0c0c0 solid;
   background-color: #f8f8f8;
@@ -182,8 +172,7 @@ img.large {
 .price {
   font-size: 2rem;
 }
-/** (==> End: Card <==) */
-
+/* * (End: == Card ==) */
 /* ==> Rating Stars <== */
 .rating span {
   color: #f0c040;
@@ -192,10 +181,9 @@ img.large {
 .rating span:last-child {
   color: #404040;
 }
-/* (==> End: Rating Stars <==) */
-
-/** ==> Alert <== */
-/*? ==> Prevent moving around spinner for loading */
+/* (End: == Rating Stars ==) */
+/* * ==> Alert <== */
+/* ? ==> Prevent moving around spinner for loading */
 .loading {
   display: block !important;
 }
@@ -205,8 +193,7 @@ img.large {
 .danger {
   color: #a02020;
 }
-/** (==> End: Alert <==) */
-
+/* * (End: == Alert ==) */
 /* ==> Alert Message <== */
 .alert {
   padding: 1rem;
@@ -221,9 +208,8 @@ img.large {
   color: #a02020;
   background-color: #ffe0e0;
 }
-/* (==> End: Alert Message <==) */
-
-/** ==> Loading Spinner <== */
+/* (End: == Alert Message ==) */
+/* * ==> Loading Spinner <== */
 .spinner span {
   display: flex;
   flex-wrap: wrap;
@@ -235,9 +221,8 @@ img.large {
   font-size: 1.5rem;
   color: #404040;
 }
-/** (==> End: Loading Spinner <==) */
-
-/* ==> Back Home Message <== */
+/* * (End: == Loading Spinner ==) */
+/* ==> Back Home <== */
 .back-home span {
   font-size: 1.5rem;
   color: #404040;
@@ -246,9 +231,8 @@ img.large {
 .back-home span:last-child:hover {
   font-size: 1.6rem;
 }
-/* (==> End:  Back Home Message <==) */
-
-/** ==> Signin Form <== */
+/* (End: == Back Home ==) */
+/* * ==> Sign In Form <== */
 .form {
   max-width: 60rem;
   margin: 0 auto;
@@ -262,8 +246,7 @@ img.large {
   margin: 1rem 0;
   display: block;
 }
-/** (==> End: Signin Form <==) */
-
+/* * (End: == Sign In Form ==) */
 /* ==> User Dropdown Menu <== */
 .dropdown {
   display: inline-block;
@@ -284,4 +267,17 @@ img.large {
 .dropdown:hover .dropdown-content {
   display: block;
 }
-/* (==> End: User Dropdown Menu <==) */
+/* (End: == User Dropdown Menu ==) */
+/* * ==> Checkout Steps <== */
+.checkout-steps > div {
+  border-top: 0.3rem #c0c0c0 solid;
+  color: #c0c0c0;
+  flex: 1;
+  padding: 1rem;
+  font-weight: bold;
+}
+.checkout-steps > div.active {
+  border-top-color: #f08000;
+  color: #f08000;
+}
+/* * (End: == Checkout Steps ==) */

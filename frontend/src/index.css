@@ -244,7 +244,7 @@ img.large {
 }
 .form label {
   margin: 1rem 0;
-  display: block;
+  /* display: block; ==> Not need remove */
 }
 /* * (End: == Sign In Form ==) */
 /* ==> User Dropdown Menu <== */

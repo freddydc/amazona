@@ -14,3 +14,29 @@ export const generateToken = (user) => {
     }
   );
 };
+
+/* ==> ( User Authenticate Middleware ) <==
+TODO: Learn next() usage on middleware.
+*/
+export const isAuth = (req, res, next) => {
+  //? Set authorization fields by headers request.
+  const authorization = req.headers.authorization;
+  if (authorization) {
+    /*
+    ? - Get authorization that start on 7 index = ("Bearer 7xx...") format.
+    */
+    const token = authorization.slice(7, authorization.length);
+    /* ==> Decrypt User Token <== decode = contain user token data */
+    jwt.verify(token, process.env.JWT_SECRET || "secret", (err, decode) => {
+      if (err) {
+        res.status(401).send({ message: "Invalid Token" });
+      } else {
+        /* By ( Order Router ) request, user data is get */
+        req.user = decode;
+        next(); //? Pass user request data to next middleware.
+      }
+    });
+  } else {
+    res.status(401).send({ message: "No token" });
+  }
+};

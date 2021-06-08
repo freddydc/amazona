@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
+import orderRouter from "./routers/orderRouter.js";
 
 dotenv.config();
 
@@ -59,6 +60,7 @@ mongoose.connect(urlMongodb || "mongodb://localhost/amazona", optMongodb);
 //* Response a router from (routers folder).
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/orders", orderRouter)
 
 /*
 ? Nota: Send message error to (front).

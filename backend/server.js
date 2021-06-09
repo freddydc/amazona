@@ -9,74 +9,66 @@ dotenv.config();
 
 const app = express();
 
-// TODO: Learn GET and POST method express.
+/* ==> ( Middleware ) <==
+TODO: - Learn express ( GET and POST ) method.
+*/
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const port = process.env.PORT || 5000;
+/* ==> ( Before Mongodb ) <==
+? - Url: ( /:id ) for ( req.params.id ) by user ( input ).
+* - Product data is used by ( actions and reducers )
+*    - for ( product list and details ).
 
-/*
-? Nota: Mongoose Connection.
-* first param database URL: 'mongodb://localhost/amazona'
-
-TODO: Learn second param for options:
-* useNewUrlParser: true = for get 'warnings',
-* for duplicates in mongodb collection.
-*/
-
-/*
 app.get("/api/products/:id", (req, res) => {
-  ? Nota: (/:id) for (req.params.id), to user (input).
-  * The (product) is received in actions and reducers folder,
-  * ... for (product List and Details) in Action and Reducer.
-
   const product = data.products.find((x) => x._id === req.params.id);
-
-  * Check (product) exist
+  * - Check ( product ).
   if (product) {
     res.send(product);
   } else {
-    * Create custom (message) for error
+    * - Create custom error ( message ).
     res.status(404).send({ message: "Product Not Found" });
   }
 });
-
 app.get("/api/products", (req, res) => {
   res.send(data.products);
 });
 */
 
+/* ==> ( Mongoose ) <==
+* - First parameter URL: 'mongodb://localhost/amazona'
+TODO: - Learn second parameter options:
+* - Use-New-Url-Parser: true ==> for get ( warnings )
+*    - for duplicates in mongodb collection.
+*/
 const { MONGODB_HOSTNAME, MONGODB_PORT, MONGO_DB } = process.env;
 const urlMongodb = `mongodb://${MONGODB_HOSTNAME}:${MONGODB_PORT}/${MONGO_DB}`;
-
 const optMongodb = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
 };
-
 mongoose.connect(urlMongodb || "mongodb://localhost/amazona", optMongodb);
 
-//* Response a router from (routers folder).
+/* ==> ( Routers ) <== */
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
-app.use("/api/orders", orderRouter)
-
-/*
-? Nota: Send message error to (front).
-* Show (error) messages from (routers folder),
-* ... (middleware) error catcher.
-TODO: Try the message error key (name).
-*/
-
-app.use((err, req, res, next) => {
-  res.status(500).send({ message: err.message });
-});
+app.use("/api/orders", orderRouter);
 
 app.get("/", (req, res) => {
   res.send("Server is ready");
 });
 
+/* ==> ( Middleware ) <==
+? - Send error message to ( Front Client ) for
+?    - view all errors generated in routers by ( Middleware ) catcher.
+TODO: - Test key name ( message ).
+*/
+app.use((err, req, res, next) => {
+  res.status(500).send({ message: err.message });
+});
+
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server at http://localhost:${port}`);
 });

@@ -34,4 +34,24 @@ orderRouter.post(
   })
 );
 
+/* ==> ( isAuth ) middleware <==
+? - Only authenticated users can see ( Order Screen ).
+*/
+orderRouter.get(
+  "/:id",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    /* ==> ( Get Order ) <==
+    ? - Get ( order ) from mongodb collection by ( Id )
+    ?    - using mongoose method ==> findById( id ).
+    */
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      res.send(order);
+    } else {
+      res.status(404).send({ message: "Order Not Found" });
+    }
+  })
+);
+
 export default orderRouter;

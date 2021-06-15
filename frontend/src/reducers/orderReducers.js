@@ -23,10 +23,13 @@ export const orderCreateReducer = (state = {}, action) => {
   }
 };
 
-export const orderDetailsReducer = (
-  state = { loading: true, order: {} },
-  action
-) => {
+/* ==> ( Order Details Reducer ) state <==
+? - Remove default ==> ( order : {} ) because when
+*     ( ORDER_DETAILS_REQUEST ) happen change ( order ) from empty to null.
+? - If make ( Use Effect ) ==> Not run ( ORDER_DETAILS_SUCCESS ) action
+*     and cannot load data to Order Screen.
+*/
+export const orderDetailsReducer = (state = { loading: true }, action) => {
   switch (action.type) {
     case ORDER_DETAILS_REQUEST:
       return { loading: true };

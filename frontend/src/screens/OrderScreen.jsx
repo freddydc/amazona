@@ -3,9 +3,10 @@ import { PayPalButton } from "react-paypal-button-v2";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { detailsOrder } from "../actions/orderActions";
+import { detailsOrder, payOrder } from "../actions/orderActions";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
+import { ORDER_PAY_RESET } from "../constants/orderConstants";
 
 export default function OrderScreen(props) {
   const orderId = props.match.params.id;
@@ -13,6 +14,13 @@ export default function OrderScreen(props) {
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
   console.log("Order Screen:", orderId, props); //! Info.
+
+  const orderPay = useSelector((state) => state.orderPay);
+  const {
+    loading: loadingPay,
+    error: errorPay,
+    success: successPay,
+  } = orderPay;
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -26,16 +34,24 @@ export default function OrderScreen(props) {
       script.onload = () => {
         setSdkReady(true);
       };
-      //* ==> Add own script inside last child.
+      //? ==> Add own script inside last child.
       document.body.appendChild(script);
     };
 
-    if (!order) {
-      //* ==> If ( Order Details ) is not loaded.
+    if (!order || successPay || (order && order._id !== orderId)) {
+      /* ==> ( ORDER_PAY_RESET ) <==
+      ? - Before dispatch: ( DETAILS ORDER ) need reset ( ORDER PAY )
+      *    for prevent ORDER_DETAILS ( REQUEST and SUCCESS ) many times.
+      */
+      dispatch({ type: ORDER_PAY_RESET });
+      /* ==> ( DETAILS ORDER ) <==
+      ? - Run and Update dispatch: ( DETAILS ORDER action )
+      *    according condition data.
+      */
       dispatch(detailsOrder(orderId));
     } else {
       if (!order.isPaid) {
-        // TODO: - Learn how to load script and the window for ( paypal ).
+        // TODO: Learn how to charge ( PAYPAL ) script and window.
         if (!window.paypal) {
           addPayPalScript();
         } else {
@@ -43,10 +59,10 @@ export default function OrderScreen(props) {
         }
       }
     }
-  }, [dispatch, order, orderId, sdkReady]);
+  }, [dispatch, order, orderId, sdkReady, successPay]);
 
-  const successPaymentHandler = () => {
-    // TODO: Dispatch pay order.
+  const successPaymentHandler = (paymentResult) => {
+    dispatch(payOrder(order, paymentResult));
   };
 
   return loading ? (
@@ -165,10 +181,16 @@ export default function OrderScreen(props) {
                   {!sdkReady ? (
                     <LoadingBox></LoadingBox>
                   ) : (
-                    <PayPalButton
-                      amount={order.totalPrice}
-                      onSuccess={successPaymentHandler}
-                    ></PayPalButton>
+                    <>
+                      {errorPay && (
+                        <MessageBox variant="danger">{errorPay}</MessageBox>
+                      )}
+                      {loadingPay && <LoadingBox></LoadingBox>}
+                      <PayPalButton
+                        amount={order.totalPrice}
+                        onSuccess={successPaymentHandler}
+                      ></PayPalButton>
+                    </>
                   )}
                 </li>
               )}

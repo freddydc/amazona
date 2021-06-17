@@ -7,6 +7,9 @@ import {
   ORDER_DETAILS_FAIL,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
+  ORDER_PAY_FAIL,
+  ORDER_PAY_REQUEST,
+  ORDER_PAY_SUCCESS,
 } from "../constants/orderConstants";
 
 //? - Fields: dispatch and getState by ( redux thunk ).
@@ -65,3 +68,32 @@ export const detailsOrder = (orderId) => async (dispatch, getState) => {
     dispatch({ type: ORDER_DETAILS_FAIL, payload: message });
   }
 };
+
+/* ==> ( Complete Payment ) <== action */
+export const payOrder =
+  (order, paymentResult) => async (dispatch, getState) => {
+    dispatch({ type: ORDER_PAY_REQUEST, payload: { order, paymentResult } });
+    const {
+      userSignIn: { userInfo },
+    } = getState();
+    /* ==> ( SEND AJAX REQUEST ) <== */
+    try {
+      /* ==> ( Axios Put ) <==
+      ? - Second parameter ( Payment Result ) = Payload Request.
+      */
+      const { data } = await Axios.put(
+        `/api/orders/${order._id}/pay`,
+        paymentResult,
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      dispatch({ type: ORDER_PAY_SUCCESS, payload: data });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({ type: ORDER_PAY_FAIL, payload: message });
+    }
+  };

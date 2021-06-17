@@ -55,3 +55,29 @@ orderRouter.get(
 );
 
 export default orderRouter;
+
+/* ==> ( PAYMENT ) <== api */
+orderRouter.put(
+  "/:id/pay",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    //? ==> Get ( order model by ID ) to complete the payment.
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      //* ==> The payment information by ( METHOD ).
+      order.paymentResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.payer.email_address,
+      };
+      //? ==> Changing old data information to ( order ).
+      const updatedOrder = await order.save();
+      res.send({ message: "Order Paid", order: updatedOrder });
+    } else {
+      res.status(404).send({ message: "Order Not Found" });
+    }
+  })
+);

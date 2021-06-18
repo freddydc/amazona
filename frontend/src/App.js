@@ -4,6 +4,7 @@ import { BrowserRouter, Link, Route } from "react-router-dom";
 import { signOut } from "./actions/userActions";
 import CartScreen from "./screens/CartScreen";
 import HomeScreen from "./screens/HomeScreen";
+import OrderHistoryScreen from "./screens/OrderHistoryScreen";
 import OrderScreen from "./screens/OrderScreen";
 import PaymentMethodScreen from "./screens/PaymentMethodScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
@@ -51,12 +52,16 @@ function App() {
             </Link>
             {userInfo ? (
               <div className="dropdown">
-                {/* User Name Menu */}
+                {/* USER NAME MENU */}
                 <Link to="#">
                   {userInfo.name} <i className="fas fa-caret-down"></i>
                 </Link>
                 <ul className="dropdown-content">
-                  {/* Sign-Out Menu */}
+                  {/* HISTORY MENU */}
+                  <li>
+                    <Link to="/orderhistory">Order History</Link>
+                  </li>
+                  {/* SIGN-OUT MENU */}
                   <li>
                     <Link to="#signout" onClick={signOutHandler}>
                       Sign Out
@@ -65,7 +70,7 @@ function App() {
                 </ul>
               </div>
             ) : (
-              //? ==> Sign-In Menu.
+              /* SIGN-IN MENU */
               <Link to="/signin">Sign In</Link>
             )}
           </div>
@@ -79,6 +84,7 @@ function App() {
           <Route path="/payment" component={PaymentMethodScreen}></Route>
           <Route path="/placeorder" component={PlaceOrderScreen}></Route>
           <Route path="/order/:id" component={OrderScreen}></Route>
+          <Route path="/orderhistory" component={OrderHistoryScreen}></Route>
           <Route path="/" component={HomeScreen} exact></Route>
         </main>
         <footer className="row center">All right reserved</footer>

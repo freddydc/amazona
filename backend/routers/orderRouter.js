@@ -3,12 +3,27 @@ import expressAsyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
 import { isAuth } from "../utils.js";
 
+const orderRouter = express.Router();
+
+/* ==> ( ORDER MINE ) api <== */
+orderRouter.get(
+  "/mine",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    /* ==> ( orders ) <==
+    ? - Get ( orders ) for current USER by Id.
+    * - Fun: find( ) run with promise set await.
+    TODO: Learn find( USER request Id )
+    */
+    const orders = await Order.find({ user: req.user._id });
+    res.send(orders);
+  })
+);
+
 /* ==> ( Order Router ) api <==
 ? - Use isAuth ( Middleware ):
 ?    - For ( Order Model Field ) user: req.user._id
 */
-const orderRouter = express.Router();
-
 orderRouter.post(
   "/",
   isAuth,

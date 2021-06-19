@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 
+/* ==> ( TOKEN GENERATOR ) <== */
 export const generateToken = (user) => {
   return jwt.sign(
     {
@@ -15,31 +16,34 @@ export const generateToken = (user) => {
   );
 };
 
-/* ==> ( Authenticate User Request Middleware ) <==
-TODO: - Learn next() usage in middleware.
-*/
+/* ==> ( USER AUTHENTICATION ) <== middleware */
 export const isAuth = (req, res, next) => {
-  //? - Fields authorization by headers request.
+  //* ==> AUTHORIZATION from HEADERS request.
   const authorization = req.headers.authorization;
   if (authorization) {
-    /*
-    ? - Get authorization ( token ) that start in 7 index for this format:
-    ?    - ("Bearer 7xx...").
+    /* ( TOKEN )
+    ? - Get user ( token ) authorization starting at seventh index:
+    *    For this format: "Bearer 7token...".
     */
     const token = authorization.slice(7, authorization.length);
-    /* ==> ( Decrypt User Token ) <==
-    ? - ( decode ) = contain user ( token ) data.
+    /* ( DECRYPT TOKEN )
+    * - Fields:
+    ?    decode: Contain user token information.
     */
     jwt.verify(token, process.env.JWT_SECRET || "secret", (err, decode) => {
       if (err) {
         res.status(401).send({ message: "Invalid Token" });
       } else {
-        //* - For the ( Order Router ) request user data is get.
+        /* ( USER REQUEST )
+        ? - For the USER request data is received in ( ORDER ROUTER ).
+        * - next( ): Pass USER request data to next middleware.
+        TODO: Learn the next( ) usage in middleware.
+        */
         req.user = decode;
-        next(); //? - Pass user request data to next middleware.
+        next();
       }
     });
   } else {
-    res.status(401).send({ message: "No token" });
+    res.status(401).send({ message: "No Token" });
   }
 };

@@ -9,21 +9,21 @@ import OrderScreen from "./screens/OrderScreen";
 import PaymentMethodScreen from "./screens/PaymentMethodScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import ProductScreen from "./screens/ProductScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import SigninScreen from "./screens/SigninScreen";
 
-/* ==> tag <Route> <==
-? - <Route exact> if url is exact to (/) render (Home-Screen).
-* - (/cart/:id?) the last (?) in (/:id?) for view
-*     (localhost:3000/cart/3?qty=8) on browser (Cart-Screen).
+/* ==> ( Route ) <== tag
+? - Field: < Route exact > if url is EXACT to path ( / ) render ( HOME SCREEN ).
+* - Path: ( /cart/:id? ) last mark ( ? ) in ( /:id? ) to show:
+?    localhost:3000/cart/3?qty=8 ( CART SCREEN ) in browser.
 */
 function App() {
-  //? ==> Get access to (data info it contain) by (redux-store).
+  //? ==> Get access to ( DATA INFORMATION ) from ( REDUX STORE ).
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-  //! info.
-  // console.log(`cart items: ${cartItems.length} ${cartItems}`);
+  // console.log(`cart items: ${cartItems.length} ${cartItems}`); //! info.
 
   const userSignIn = useSelector((state) => state.userSignIn);
   const { userInfo } = userSignIn;
@@ -43,25 +43,30 @@ function App() {
             </Link>
           </div>
           <div>
-            {/* (Badge-Add-Cart-Item) for show quantity (icon) */}
+            {/* ( BADGE ADD TO CART ) to show quantity ICON */}
             <Link to="/cart">
               Cart
               {cartItems.length > 0 && (
                 <span className="badge">{cartItems.length}</span>
               )}
             </Link>
+            {/* ==> ( USER MENU ) <== */}
             {userInfo ? (
               <div className="dropdown">
-                {/* USER NAME MENU */}
+                {/* Name */}
                 <Link to="#">
                   {userInfo.name} <i className="fas fa-caret-down"></i>
                 </Link>
                 <ul className="dropdown-content">
-                  {/* HISTORY MENU */}
+                  {/* Profile */}
+                  <li>
+                    <Link to="/profile">Profile</Link>
+                  </li>
+                  {/* Order History */}
                   <li>
                     <Link to="/orderhistory">Order History</Link>
                   </li>
-                  {/* SIGN-OUT MENU */}
+                  {/* Sign-Out */}
                   <li>
                     <Link to="#signout" onClick={signOutHandler}>
                       Sign Out
@@ -70,7 +75,7 @@ function App() {
                 </ul>
               </div>
             ) : (
-              /* SIGN-IN MENU */
+              /* Sign-In */
               <Link to="/signin">Sign In</Link>
             )}
           </div>
@@ -85,6 +90,7 @@ function App() {
           <Route path="/placeorder" component={PlaceOrderScreen}></Route>
           <Route path="/order/:id" component={OrderScreen}></Route>
           <Route path="/orderhistory" component={OrderHistoryScreen}></Route>
+          <Route path="/profile" component={ProfileScreen}></Route>
           <Route path="/" component={HomeScreen} exact></Route>
         </main>
         <footer className="row center">All right reserved</footer>

@@ -12,6 +12,7 @@ import {
   productListReducer,
 } from "./reducers/productReducers";
 import {
+  userDetailsReducer,
   userRegisterReducer,
   userSignInReducer,
 } from "./reducers/userReducers";
@@ -60,6 +61,7 @@ const reducer = combineReducers({
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
   orderMineList: orderMineListReducer,
+  userDetails: userDetailsReducer,
 });
 
 /* <== compose-fun <==

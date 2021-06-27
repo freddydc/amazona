@@ -11,7 +11,9 @@ import {
   PRODUCT_CREATE_RESET,
 } from "../constants/productConstants";
 
-//* Set default "state" for possibles errors
+/* ==> ( PRODUCT LIST ) <==
+? Default State: for possible mistake.
+*/
 export const productListReducer = (
   state = { loading: true, products: [] },
   action
@@ -28,11 +30,8 @@ export const productListReducer = (
   }
 };
 
-//* Responding this action from "actions"
-export const productDetailsReducer = (
-  state = { loading: true, product: {} },
-  action
-) => {
+/* ==> ( PRODUCT DETAILS ) <== */
+export const productDetailsReducer = (state = { loading: true }, action) => {
   switch (action.type) {
     case PRODUCT_DETAILS_REQUEST:
       return { loading: true };

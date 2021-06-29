@@ -9,8 +9,12 @@ import {
   PRODUCT_LIST_FAIL,
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
+  PRODUCT_UPDATE_REQUEST,
+  PRODUCT_UPDATE_SUCCESS,
+  PRODUCT_UPDATE_FAIL,
 } from "../constants/productConstants";
 
+/* ==> ( PRODUCT LIST ) <== */
 export const listProducts = () => async (dispatch) => {
   /*
   ? type: (Action description)
@@ -19,7 +23,6 @@ export const listProducts = () => async (dispatch) => {
   dispatch({
     type: PRODUCT_LIST_REQUEST,
   });
-
   //* (Fetch data) from backend.
   try {
     const { data } = await Axios.get("/api/products");
@@ -30,10 +33,9 @@ export const listProducts = () => async (dispatch) => {
   }
 };
 
-//* Response (actions) in (reducers).
+/* ==> ( PRODUCT DETAILS ) <== */
 export const detailsProduct = (productId) => async (dispatch) => {
   dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });
-
   //* Nota: For (detect error) in backend.
   try {
     const { data } = await Axios.get(`/api/products/${productId}`);
@@ -63,7 +65,7 @@ export const createProduct = () => async (dispatch, getState) => {
   try {
     /* ( Axios ) POST.
     ? Second Field:
-    *  { } for: Payload Request.
+    *  {}: Payload Request.
     */
     const { data } = await Axios.post(
       "/api/products",
@@ -77,5 +79,30 @@ export const createProduct = () => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     dispatch({ type: PRODUCT_CREATE_FAIL, payload: message });
+  }
+};
+
+/* ==> ( UPDATE PRODUCT ) <== */
+export const updateProduct = (product) => async (dispatch, getState) => {
+  dispatch({ type: PRODUCT_UPDATE_REQUEST, payload: product });
+  const {
+    userSignIn: { userInfo },
+  } = getState();
+  /* ( SEND AJAX REQUEST ) */
+  try {
+    /* ( Axios ) PUT.
+    ? SECOND FIELD:
+    *  ( product ): Payload Request.
+    */
+    const { data } = await Axios.put(`/api/products/${product._id}`, product, {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: PRODUCT_UPDATE_FAIL, payload: message });
   }
 };

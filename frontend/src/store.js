@@ -13,6 +13,7 @@ import {
   productListReducer,
   productUpdateReducer,
 } from "./reducers/productReducers";
+import { imageUploadReducer } from "./reducers/uploadReducers";
 import {
   userDetailsReducer,
   userRegisterReducer,
@@ -68,6 +69,7 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
   productCreate: productCreateReducer,
   productUpdate: productUpdateReducer,
+  imageUpload: imageUploadReducer,
 });
 
 /* <== compose-fun <==

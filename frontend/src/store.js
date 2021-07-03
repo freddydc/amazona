@@ -9,6 +9,7 @@ import {
 } from "./reducers/orderReducers";
 import {
   productCreateReducer,
+  productDeleteReducer,
   productDetailsReducer,
   productListReducer,
   productUpdateReducer,
@@ -70,6 +71,7 @@ const reducer = combineReducers({
   productCreate: productCreateReducer,
   productUpdate: productUpdateReducer,
   imageUpload: imageUploadReducer,
+  productDelete: productDeleteReducer,
 });
 
 /* <== compose-fun <==

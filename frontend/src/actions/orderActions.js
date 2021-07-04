@@ -13,24 +13,29 @@ import {
   ORDER_PAY_FAIL,
   ORDER_PAY_REQUEST,
   ORDER_PAY_SUCCESS,
+  ORDER_LIST_REQUEST,
+  ORDER_LIST_SUCCESS,
+  ORDER_LIST_FAIL,
 } from "../constants/orderConstants";
 
-//? - Fields: dispatch and getState by ( redux thunk ).
+/* ==> ( CREATE ORDER ) <==
+? Fields: Dispatch and getState by: ( redux thunk ).
+*/
 export const createOrder = (order) => async (dispatch, getState) => {
   dispatch({ type: ORDER_CREATE_REQUEST, payload: order });
-  /* ==> ( SEND AJAX REQUEST ) <== */
+  /* ( SEND AJAX REQUEST ) */
   try {
-    /* ==> ( User Info ) field <==
-    ? - Get ( user-info ) token from redux store by ( user-sign-in ).
-    ? - getState(): return all redux store.
+    /* ( User ) TOKEN.
+    ? Get ( User Info ) token from redux store by ( User Sign In ).
+    ? getState(): return all redux store.
     */
     const {
       userSignIn: { userInfo },
     } = getState();
-    /* ==> ( Axios Post ) <==
-    ? - Parameters:
-    ?    - Second: ( order ) is request payload.
-    ?    - Third: ( headers : {} ) is for options.
+    /* ( Axios ) POST.
+    ? Parameters:
+    *  Second: ( order ) Request Payload.
+    *  Third: ( headers : {} ) Options.
     */
     const { data } = await Axios.post("/api/orders", order, {
       headers: {
@@ -52,12 +57,13 @@ export const createOrder = (order) => async (dispatch, getState) => {
   }
 };
 
+/* ==> ( ORDER DETAILS ) <== */
 export const detailsOrder = (orderId) => async (dispatch, getState) => {
   dispatch({ type: ORDER_DETAILS_REQUEST, payload: orderId });
   const {
     userSignIn: { userInfo },
   } = getState();
-  /* ==> ( SEND AJAX REQUEST ) <== */
+  /* ( SEND AJAX REQUEST ) */
   try {
     const { data } = await Axios.get(`/api/orders/${orderId}`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -72,17 +78,18 @@ export const detailsOrder = (orderId) => async (dispatch, getState) => {
   }
 };
 
-/* ==> ( Complete Payment ) <== action */
+/* ==> ( PAY ORDER ) <== */
 export const payOrder =
   (order, paymentResult) => async (dispatch, getState) => {
     dispatch({ type: ORDER_PAY_REQUEST, payload: { order, paymentResult } });
     const {
       userSignIn: { userInfo },
     } = getState();
-    /* ==> ( SEND AJAX REQUEST ) <== */
+    /* ( SEND AJAX REQUEST ) */
     try {
-      /* ==> ( Axios Put ) <==
-      ? - Second parameter ( Payment Result ) = Payload Request.
+      /* ( Axios ) PUT.
+      ? Field:
+      *  Second parameter: ( Payment Result ) = Payload Request.
       */
       const { data } = await Axios.put(
         `/api/orders/${order._id}/pay`,
@@ -102,7 +109,7 @@ export const payOrder =
   };
 
 /* ==> ( ORDER MINE ) <==
-? - Accept fields: ( dispatch and Get State ) from redux thunk.
+? Accept Fields: ( Dispatch And Get State ) from redux thunk.
 */
 export const listOrderMine = () => async (dispatch, getState) => {
   dispatch({ type: ORDER_MINE_LIST_REQUEST });
@@ -121,5 +128,27 @@ export const listOrderMine = () => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     dispatch({ type: ORDER_MINE_LIST_FAIL, payload: message });
+  }
+};
+
+/* ==> ( ORDER LIST ) <== */
+export const listOrders = () => async (dispatch, getState) => {
+  dispatch({ type: ORDER_LIST_REQUEST });
+  const {
+    userSignIn: { userInfo },
+  } = getState();
+  /* ( SEND AJAX REQUEST ) */
+  try {
+    const { data } = await Axios.get("/api/orders", {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    console.log(data); //! info.
+    dispatch({ type: ORDER_LIST_SUCCESS, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: ORDER_LIST_FAIL, payload: message });
   }
 };

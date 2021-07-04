@@ -1,18 +1,29 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
-import { isAuth } from "../utils.js";
+import { isAdmin, isAuth } from "../utils.js";
 
 const orderRouter = express.Router();
 
-/* ==> ( ORDER MINE ) api <== */
+/* ==> ( Order List ) <== API */
+orderRouter.get(
+  "/",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const orders = await Order.find({}).populate("user", "name");
+    res.send(orders);
+  })
+);
+
+/* ==> ( Order Mine ) <== API */
 orderRouter.get(
   "/mine",
   isAuth,
   expressAsyncHandler(async (req, res) => {
     /* ==> ( orders ) <==
-    ? - Get ( orders ) for current USER by Id.
-    * - Fun: find( ) run with promise set await.
+    ? Get ( orders ) for current USER by Id.
+    * Fun: find( ) run with promise set await.
     TODO: Learn find( USER request Id )
     */
     const orders = await Order.find({ user: req.user._id });
@@ -20,9 +31,9 @@ orderRouter.get(
   })
 );
 
-/* ==> ( Order Router ) api <==
-? - Use isAuth ( Middleware ):
-?    - For ( Order Model Field ) user: req.user._id
+/* ==> ( Create Order ) <== API
+? Middleware ( isAuth ) usage in:
+*  Order Model Field: ( user: req.user._id ).
 */
 orderRouter.post(
   "/",
@@ -49,16 +60,17 @@ orderRouter.post(
   })
 );
 
-/* ==> ( isAuth ) middleware <==
-? - Only authenticated users can see ( Order Screen ).
+/* ==> ( Order Details ) <== API
+? Middleware ( isAuth ):
+?  Only authenticated users can see ( Order Screen ).
 */
 orderRouter.get(
   "/:id",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    /* ==> ( Get Order ) <==
-    ? - Get ( order ) from mongodb collection by ( Id )
-    ?    - using mongoose method ==> findById( id ).
+    /*
+    ? Get ( order ) from data collection by ( Id )
+    ?  using mongoose method ==> findById( Parameter Id ).
     */
     const order = await Order.findById(req.params.id);
     if (order) {
@@ -69,26 +81,24 @@ orderRouter.get(
   })
 );
 
-export default orderRouter;
-
-/* ==> ( PAYMENT ) <== api */
+/* ==> ( Pay Order ) <== API */
 orderRouter.put(
   "/:id/pay",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    //? ==> Get ( order model by ID ) to complete the payment.
+    //? ==> Get ( order model by ID ) to complete pay.
     const order = await Order.findById(req.params.id);
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
-      //* ==> The payment information by ( METHOD ).
+      //* ==> Payment information by ( Method ).
       order.paymentResult = {
         id: req.body.id,
         status: req.body.status,
         update_time: req.body.update_time,
         email_address: req.body.payer.email_address,
       };
-      //? ==> Changing old data information to ( order ).
+      //? ==> Changing old ( Order Data ) with new information.
       const updatedOrder = await order.save();
       res.send({ message: "Order Paid", order: updatedOrder });
     } else {
@@ -96,3 +106,5 @@ orderRouter.put(
     }
   })
 );
+
+export default orderRouter;

@@ -13,8 +13,12 @@ import {
   ORDER_PAY_REQUEST,
   ORDER_PAY_RESET,
   ORDER_PAY_SUCCESS,
+  ORDER_LIST_REQUEST,
+  ORDER_LIST_SUCCESS,
+  ORDER_LIST_FAIL,
 } from "../constants/orderConstants";
 
+/* ==> ( CREATE ORDER ) <== */
 export const orderCreateReducer = (state = {}, action) => {
   switch (action.type) {
     case ORDER_CREATE_REQUEST:
@@ -30,11 +34,11 @@ export const orderCreateReducer = (state = {}, action) => {
   }
 };
 
-/* ==> ( Order Details Reducer ) state <==
-? - Remove default ==> ( order : {} ) because when
-*     ( ORDER_DETAILS_REQUEST ) happen change ( order ) from empty to null.
-? - If make ( Use Effect ) ==> Not run ( ORDER_DETAILS_SUCCESS ) action
-*     and cannot load data to Order Screen.
+/* ==> ( ORDER DETAILS ) <==
+? Remove: (state = { order : {} }) because when
+*  ORDER_DETAILS_REQUEST happen change ( order ) from empty to null.
+? If make ( Use Effect ): Not run ORDER_DETAILS_SUCCESS action
+*  and cannot load data to Order Screen.
 */
 export const orderDetailsReducer = (state = { loading: true }, action) => {
   switch (action.type) {
@@ -49,7 +53,7 @@ export const orderDetailsReducer = (state = { loading: true }, action) => {
   }
 };
 
-/* ==> ( COMPLETE PAYMENT ) <== */
+/* ==> ( PAY ORDER ) <== */
 export const orderPayReducer = (state = {}, action) => {
   switch (action.type) {
     case ORDER_PAY_REQUEST:
@@ -73,6 +77,20 @@ export const orderMineListReducer = (state = { orders: [] }, action) => {
     case ORDER_MINE_LIST_SUCCESS:
       return { loading: false, orders: action.payload };
     case ORDER_MINE_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+/* ==> ( ORDER LIST ) <== */
+export const orderListReducer = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case ORDER_LIST_REQUEST:
+      return { loading: true };
+    case ORDER_LIST_SUCCESS:
+      return { loading: false, orders: action.payload };
+    case ORDER_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

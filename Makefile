@@ -1,190 +1,184 @@
-# === DOCKER MAKEFILE ===
-# ==> Commands <==
 compose = sudo docker-compose
+composeFile = docker-compose.dev.yml
 docker = sudo docker
-# ==> Mongodb <==
-MONGODB_VOLUME = src=amazona_store-data,dst=/data/db
-MONGODB_URL = MONGODB_URL=mongodb://mongo-test:27017/AmazonaAIR
+
+MONGO_VOLUME = src=amazona_store-data,dst=/data/db
+MONGO_URL = MONGODB_URL=mongodb://mongo-test:27017/AmazonaTest
 MONGO_BIONIC = mongo:4-bionic
-# ==> Messages <==
-ctInfo = echo "\n Containers empty. \n"
-tagInfo = echo "\n No image to tag. \n"
-pushInfo = echo "\n Image not exist to push. \n"
-netInfo = echo "\n Network already exist. \n"
-# ==> Ports <==
+mongoData = amazona_store-data
+
+storeNet = amazona_store-tier
+testNet = red
+
+conMessage = echo '\n Containers Empty \n'
+tagMessage = echo '\n No Image To Tag \n'
+pushMessage = echo '\n Image Not Found \n'
+netMessage = echo '\n Already Exist \n'
+
 API_PORT = 5000:5000
 FRONT_PORT = 3000:3000
-DB_PORT = 27017:27017
-# ==> Production Image Tags <==
-SERVER = api:v0.1.0
-FRONT = storefront:v0.1.0
-# ==> Development Image tags <==
-serverDev = backend
-frontDev = frontend
-# ==> User <==
-USER = freddydc
-# ==> Utils <==
+MONGO_PORT = 27017:27017
+
+API = api:v0.1.0
+FRONT = front:v0.1.0
 ALPINE = alpine:3.13
-frontPath = ./frontend
-serverPath = ./backend
-composeFile = docker-compose.dev.yml
 DIVE = wagoodman/dive:v0.10
-mgData = amazona_store-data
-storeNetwork = amazona_store-tier
-testNet = red
-# ==> Help <==
+diveMount = /var/run/docker.sock:/var/run/docker.sock
+
+apiTag = backend
+frontTag = frontend
+
+apiPath = ./backend
+frontPath = ./frontend
+
+USER = freddydc
+
 help:
-	@echo "Commands:"
-	@echo "  make ps    List containers running and stopped"
-# ==> Enable And Disable <==
+	@echo 'Welcome'
 di:
 	sudo systemctl disable --now docker
 en:
 	sudo systemctl enable --now docker
-# ==> Service Information <==
 st:
 	sudo systemctl status docker
-# ==> Main Image Builder <==
-# Development image.
-d-build:
-	${docker} build -t backend \
-		-f backend/Dockerfile.dev ${serverPath}
-	${docker} build -t frontend \
-		-f frontend/Dockerfile.dev ${frontPath}
-# Production image.
-p-build:
-	${docker} build -t ${SERVER} \
-		-f backend/Dockerfile ${serverPath}
-	${docker} build -t ${FRONT} \
-		-f frontend/Dockerfile ${frontPath}
-# ==> Information <==
+
+# BUILD IMAGE
+build:
+	${docker} build -t ${apiTag} -f backend/Dockerfile.dev ${apiPath}
+	${docker} build -t ${frontTag} -f frontend/Dockerfile.dev ${frontPath}
+pro-build:
+	${docker} build -t ${API} -f backend/Dockerfile ${apiPath}
+	${docker} build -t ${FRONT} -f frontend/Dockerfile ${frontPath}
+
+# INFO
 ps:
-	${docker} ps -a
-psl:
-	${docker} ps -l
+	@${docker} ps -a
+img:
+	@${docker} images
+lps:
+	@${docker} ps -l
 nls:
-	${docker} network ls
-nin:
-	${docker} network inspect ${storeNetwork}
+	@${docker} network ls
+ine:
+	${docker} network inspect ${storeNet}
 vls:
-	${docker} volume ls
-# ==> Production Tags <==
-tg-p:
-	${docker} tag frontend:v0.1.0 ${USER}/frontend:v0.1.0 || ${tagInfo}
-	${docker} tag backend:v0.1.0 ${USER}/backend:v0.1.0 || ${tagInfo}
-# ==> Push Image <==
+	@${docker} volume ls
+
+# PRODUCTION TAG
+tag-pro:
+	${docker} tag ${FRONT} ${USER}/${FRONT} || ${tagMessage}
+	${docker} tag ${API} ${USER}/${API} || ${tagMessage}
+
+# PUSH
 push:
 	${docker} login -u ${USER}
-	${docker} push ${USER}/frontend:v0.1.0 || ${pushInfo}
-	${docker} push ${USER}/backend:v0.1.0	|| ${pushInfo}
+	${docker} push ${USER}/${FRONT} || ${pushMessage}
+	${docker} push ${USER}/${API}	|| ${pushMessage}
 	${docker} logout
-# ==> Docker Image Information <==
-img:
-	${docker} images
-# Development
-dv-api-d:
-	${docker} run --rm -it \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    ${DIVE} ${serverDev}
-dv-front-d:
-	${docker} run --rm -it \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    ${DIVE} ${frontDev}
-# Production
-dv-api:
-	${docker} run --rm -it \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    ${DIVE} ${SERVER}
-dv-front:
-	${docker} run --rm -it \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    ${DIVE} ${FRONT}
-# ==> Image Cleaner <==
+
+# DIVE IMAGE
+div-api-d:
+	${docker} run --rm -it -v ${diveMount} ${DIVE} ${apiTag}
+div-sf-d:
+	${docker} run --rm -it -v ${diveMount} ${DIVE} ${frontTag}
+div-api:
+	${docker} run --rm -it -v ${diveMount} ${DIVE} ${API}
+div-sf:
+	${docker} run --rm -it -v ${diveMount} ${DIVE} ${FRONT}
+
+# REMOVE IMAGE
 rm-api:
-	${docker} rmi ${SERVER}
-rm-front:
+	${docker} rmi ${API}
+rm-sf:
 	${docker} rmi ${FRONT}
-# Development.
-rm-img-d:
-	${docker} rmi ${serverDev} ${frontDev}
-# Production.
 rmi:
-	${docker} rmi ${SERVER} ${FRONT}
-# ==> Docker Compose <==
+	${docker} rmi ${apiTag} ${frontTag}
+rmi-pro:
+	${docker} rmi ${API} ${FRONT}
+
+# COMPOSE
 cps:
-	${compose} ps
-# Production.
-up-p:
-	${compose} up -d
-# Development.
+	@${compose} ps
 up:
 	${compose} -f ${composeFile} up
-dcs:
+up-pro:
+	${compose} up -d
+cs:
 	${compose} stop
-dcd:
+cd:
 	${compose} down
-dcl:
+log:
 	${compose} logs
-dcl-mg:
-	${compose} logs mongodb
-dcl-api:
-	${compose} logs api
-dcl-front:
-	${compose} logs storefront
-dcl-f:
-	${compose} logs -f api storefront mongodb
-dc-build:
-	${compose} build
-dc-build-d:
+lmo:
+	${compose} logs -f mongo
+lap:
+	${compose} logs -f api
+lsf:
+	${compose} logs -f front
+logs:
+	${compose} logs -f api front mongo
+cmb:
 	${compose} -f ${composeFile} build
-# ==> Manually Runner: (mongo - api - front) <==
-run-m:
-	${docker} network create --attachable ${testNet} || ${netInfo}
+cmb-pro:
+	${compose} build
 
-	${docker} run -d --name mongo --rm -p ${DB_PORT} \
-		--mount ${MONGODB_VOLUME} ${MONGO_BIONIC}
+# RUN MANUAL: Mongo, Api, Front.
+run-m:
+	${docker} network create --attachable ${testNet} || ${netMessage}
+
+	${docker} run -d --name mongo --rm -p ${MONGO_PORT} \
+		--mount ${MONGO_VOLUME} ${MONGO_BIONIC}
 	${docker} run -d --name api --rm -p ${API_PORT} \
-		--env ${MONGODB_URL} ${serverDev}
-	${docker} run -d --name front --rm -p ${FRONT_PORT} ${frontDev}
+		--env ${MONGO_URL} ${apiTag}
+	${docker} run -d --name front --rm -p ${FRONT_PORT} ${frontTag}
 
 	${docker} network connect ${testNet} mongo
 	${docker} network connect ${testNet} api
 	${docker} network connect ${testNet} front
-# ==> Container Runner <==
+
+# RUN
 run-alp:
 	${docker} run --name alpine --rm -it ${ALPINE}
 run-api-d:
-	${docker} run --name api --rm -p ${API_PORT} ${serverDev}
-run-front-d:
-	${docker} run --name front --rm -p ${FRONT_PORT} ${frontDev}
+	${docker} run --name api --rm -p ${API_PORT} ${apiTag}
+run-sf-d:
+	${docker} run --name front --rm -p ${FRONT_PORT} ${frontTag}
 run-api:
-	${docker} run --name api --rm -p ${API_PORT} ${SERVER}
-run-front:
+	${docker} run --name api --rm -p ${API_PORT} ${API}
+run-sf:
 	${docker} run --name front --rm -p ${FRONT_PORT} ${FRONT}
-# ==> Exec Containers <==
-emg:
+
+# EXEC
+e-mon:
 	${docker} exec -it mongo bash
 e-api:
 	${docker} exec -it api sh
-e-front:
+e-sf:
 	${docker} exec -it front sh
-# ==> Cleaner <==
+
+# REMOVE
 pr:
 	${docker} system prune
 ipr:
 	${docker} image prune
-# Container: Stop And Remove.
-cpr:
+cnp:
 	${docker} container prune
-cst:
-	${docker} stop `${docker} ps -aq` || ${ctInfo}
-crm:
-	${docker} rm $$(${docker} ps -a -q) || ${ctInfo}
-# Remove all containers.
-rac: ct-stop ct-rm
+cns:
+	${docker} stop `${docker} ps -aq` || ${conMessage}
+cnr:
+	${docker} rm $$(${docker} ps -a -q) || ${conMessage}
+
+ra: cst crm
+rsf:
+	${docker} rm front
+rap:
+	${docker} rm api
+rmo:
+	${docker} rm mongo
+
 vpr:
 	${docker} volume prune
 npr:
 	${docker} network prune
-rm-mg-vl:
-	${docker} volume rm ${mgData}
+r-mon-v:
+	${docker} volume rm ${mongoData}

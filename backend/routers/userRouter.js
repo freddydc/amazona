@@ -3,21 +3,18 @@ import expressAsyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import data from "../data.js";
 import User from "../models/userModel.js";
-import { generateToken, isAuth } from "../utils.js";
+import { generateToken, isAdmin, isAuth } from "../utils.js";
 
-/* ==> user-router <==
-* - Get method (/seed API) and create two sample (users).
-? - For get errors message use: (express-async-handler) library.
-* - Express-Async-Handler: send errors messages to (middleware),
-* -   defined on (server-file) error catcher.
-TODO: ==> Learn because mongoose operation: use (async function).
-? - User insertMany(): accept an (array) collection.
-* - Nota: (createdUsers) = insert (users data) collection in mongodb.
-TODO: ==> Learn remove (old) mongodb data using:
-* ==> await User.remove({});
+/*
+? express-async-handler library, Get Error Message:
+*  Send error message to MIDDLEWARE catcher in server.
+? insertMany(), Accept Array Collection.
+? await User.remove({}); Remove Old Mongo Data.
+TODO: Test About Mongoose Works With Async.
 */
 const userRouter = express.Router();
 
+/* ==> ( User Seed ) <== API */
 userRouter.get(
   "/seed",
   expressAsyncHandler(async (req, res) => {
@@ -27,10 +24,11 @@ userRouter.get(
   })
 );
 
+/* ==> ( Sign In ) <== API */
 userRouter.post(
   "/signin",
   expressAsyncHandler(async (req, res) => {
-    //? ==> (Compare email) on mongodb.
+    //? Get input email and compare in collection.
     const user = await User.findOne({ email: req.body.email });
     if (user) {
       if (bcrypt.compareSync(req.body.password, user.password)) {
@@ -48,6 +46,7 @@ userRouter.post(
   })
 );
 
+/* ==> ( User Register ) <== API */
 userRouter.post(
   "/register",
   expressAsyncHandler(async (req, res) => {
@@ -56,7 +55,7 @@ userRouter.post(
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 8),
     });
-    //* ==> Call save and create (new user).
+    /* Call Save Method And Create User */
     const createdUser = await user.save();
     res.send({
       _id: createdUser._id,
@@ -68,7 +67,7 @@ userRouter.post(
   })
 );
 
-/* ==> ( USER PROFILE ) <== api */
+/* ==> ( User Details ) <== API */
 userRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
@@ -81,7 +80,7 @@ userRouter.get(
   })
 );
 
-/* ==> ( Profile Update ) <== API */
+/* ==> ( User Profile ) <== API */
 userRouter.put(
   "/profile",
   isAuth,
@@ -102,6 +101,17 @@ userRouter.put(
         token: generateToken(updatedUser),
       });
     }
+  })
+);
+
+/* ==> ( User List ) <== API */
+userRouter.get(
+  "/",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const users = await User.find({});
+    res.send(users);
   })
 );
 

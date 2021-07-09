@@ -20,6 +20,7 @@ import {
 import { imageUploadReducer } from "./reducers/uploadReducers";
 import {
   userDetailsReducer,
+  userListReducer,
   userRegisterReducer,
   userSignInReducer,
   userUpdateProfileReducer,
@@ -78,6 +79,7 @@ const reducer = combineReducers({
   orderList: orderListReducer,
   orderDelete: orderDeleteReducer,
   orderDeliver: orderDeliverReducer,
+  userList: userListReducer,
 });
 
 /* <== compose-fun <==

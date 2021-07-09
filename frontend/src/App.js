@@ -18,6 +18,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import SigninScreen from "./screens/SigninScreen";
+import UserListScreen from "./screens/UserListScreen";
 
 /* ==> ( Route ) <== tag
 ? - Field: < Route exact > if url is EXACT to path ( / ) render ( HOME SCREEN ).
@@ -134,6 +135,7 @@ function App() {
             path="/order-list"
             component={OrderListScreen}
           ></AdminRoute>
+          <AdminRoute path="/user-list" component={UserListScreen}></AdminRoute>
           <Route path="/" component={HomeScreen} exact></Route>
         </main>
         <footer className="row center">All right reserved</footer>

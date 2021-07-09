@@ -1,34 +1,26 @@
 import mongoose from "mongoose";
 
-/*
-? Nota: Create schema for user.
-* Attribute: (required: true), mongoose check validation.
-
-* Attribute: (unique: true), mongoose create an (unique index),
-* ... in collection for make sure avoid duplicates (users).
-
-TODO: Learn second param for, mongoose schema: 
-? Schema Options = timestamps
-* timestamps: automatically assign, (createdAt and updatedAt) in mongodb.
+/* ==> ( User Schema ) <== ATTRIBUTES.
+*  timestamps: true, automatically assign Created At and Updated At.
+?  required: true, mongoose check field validation.
+*  unique: true, create a Unique Index to make sure avoid duplicates Users.
 */
-
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, default: false, required: true },
+    isSeller: { type: Boolean, default: false, required: true },
   },
   {
     timestamps: true,
   }
 );
 
-/*
-? Nota: Create model for user.
-* Define: mongoose.model(modelName, modelSchema)
+/* ==> ( User Model ) <==
+? Field: model('Model Name', schemaName)
 */
-
 const User = mongoose.model("User", userSchema);
 
 export default User;

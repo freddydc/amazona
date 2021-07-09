@@ -13,14 +13,16 @@ import {
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAIL,
 } from "../constants/userConstants";
 
-/* ==> (user-signin-success) dispatch <==
-? - update (redux-store) for (App.js file)
-*     read for authenticated users (user-sign-in) data.
+/* ==> ( User Register ) <==
+? Field: USER_SIGNIN_SUCCESS, update Redux Store.
 */
 export const register = (name, email, password) => async (dispatch) => {
-  //? ==> Parameter (name) not include on payload.
+  //* Field: ( name ) not include in payload.
   dispatch({ type: USER_REGISTER_REQUEST, payload: { email, password } });
   try {
     const { data } = await Axios.post("/api/users/register", {
@@ -42,17 +44,13 @@ export const register = (name, email, password) => async (dispatch) => {
   }
 };
 
-/* ==> (data-post) axios <==
-? - (parameter-dispatch) by redux-thunk.
-? - Before, the (data) must be (user data correct and ready)
-*     for dispatch user-signin-success.
-*/
+/* ==> ( Sign In ) <== */
 export const signIn = (email, password) => async (dispatch) => {
   dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
   try {
     const { data } = await Axios.post("/api/users/signin", { email, password });
     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
-    //* ==> Save (user-data) on local storage and keep (users-logged).
+    //* Local Storage: Save user login data to keep logged.
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
@@ -65,15 +63,17 @@ export const signIn = (email, password) => async (dispatch) => {
   }
 };
 
+/* ==> ( User Sign Out ) <== */
 export const signOut = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   localStorage.removeItem("cartItems");
   localStorage.removeItem("shippingAddress");
   dispatch({ type: USER_SIGNOUT });
+  document.location.href = "/signin";
   window.location.reload();
 };
 
-/* ==> ( USER PROFILE ) <== */
+/* ==> ( User Details ) <== */
 export const detailsUser = (userId) => async (dispatch, getState) => {
   dispatch({ type: USER_DETAILS_REQUEST, payload: userId });
   const {
@@ -94,7 +94,7 @@ export const detailsUser = (userId) => async (dispatch, getState) => {
   }
 };
 
-/* ==> ( PROFILE UPDATE ) <== */
+/* ==> ( User Profile ) <== */
 export const updateUserProfile = (user) => async (dispatch, getState) => {
   dispatch({ type: USER_UPDATE_PROFILE_REQUEST, payload: user });
   const {
@@ -102,15 +102,15 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
   } = getState();
   /* ( SEND AJAX REQUEST ) */
   try {
-    /* ( AXIOS )
-    ? - Parameter:
-    *    ( user ): REQUEST PAYLOAD.
+    /* ( Axios ) PUT.
+    ? Second Field:
+    *  ( user ): Payload Request.
     */
     const { data } = await Axios.put(`/api/users/profile`, user, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
-    //* ==> ( UPDATE LOGIN ).
+    //* Update Login.
     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
@@ -119,5 +119,25 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     dispatch({ type: USER_UPDATE_PROFILE_FAIL, payload: message });
+  }
+};
+
+/* ==> ( User List ) <== */
+export const listUsers = () => async (dispatch, getState) => {
+  dispatch({ type: USER_LIST_REQUEST });
+  try {
+    const {
+      userSignIn: { userInfo },
+    } = getState();
+    const { data } = await Axios.get("/api/users", {
+      headers: { Authorization: `Bearer ${userInfo.token}` },
+    });
+    dispatch({ type: USER_LIST_SUCCESS, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: USER_LIST_FAIL, payload: message });
   }
 };

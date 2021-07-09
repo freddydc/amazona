@@ -13,8 +13,12 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_RESET,
   USER_UPDATE_PROFILE_SUCCESS,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAIL,
 } from "../constants/userConstants";
 
+/* ==> ( User Register ) <== */
 export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_REGISTER_REQUEST:
@@ -28,10 +32,7 @@ export const userRegisterReducer = (state = {}, action) => {
   }
 };
 
-/* ==> user-signout <==
-? - USER_SIGNOUT: return ({} empty object),
-*     this remove (userInfo data).
-*/
+/* ==> ( User Sign In ) <== */
 export const userSignInReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_SIGNIN_REQUEST:
@@ -47,9 +48,9 @@ export const userSignInReducer = (state = {}, action) => {
   }
 };
 
-/* ==> ( USER PROFILE ) <==
-? - Default State: ( loading: true ) because call:
-?    Beginning ( USER DETAILS ) page is loading.
+/* ==> ( User Details ) <==
+? Default State:
+*  loading: true, because first call to USER DETAILS page is loading.
 */
 export const userDetailsReducer = (state = { loading: true }, action) => {
   switch (action.type) {
@@ -64,7 +65,7 @@ export const userDetailsReducer = (state = { loading: true }, action) => {
   }
 };
 
-/* ==> ( PROFILE UPDATE ) <== */
+/* ==> ( User Profile ) <== */
 export const userUpdateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_UPDATE_PROFILE_REQUEST:
@@ -75,6 +76,20 @@ export const userUpdateProfileReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case USER_UPDATE_PROFILE_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+
+/* ==> ( User List ) <== */
+export const userListReducer = (state = { loading: true }, action) => {
+  switch (action.type) {
+    case USER_LIST_REQUEST:
+      return { loading: true };
+    case USER_LIST_SUCCESS:
+      return { loading: false, users: action.payload };
+    case USER_LIST_FAIL:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }

@@ -18,23 +18,25 @@ import {
 } from "../constants/productConstants";
 
 /* ==> ( PRODUCT LIST ) <== */
-export const listProducts = () => async (dispatch) => {
-  /*
+export const listProducts =
+  ({ seller = "" }) =>
+  async (dispatch) => {
+    /*
   ? type: (Action description)
   * payload: (Action data information)
   */
-  dispatch({
-    type: PRODUCT_LIST_REQUEST,
-  });
-  //* (Fetch data) from backend.
-  try {
-    const { data } = await Axios.get("/api/products");
-    //? Dispatching (action), change (state) redux.
-    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
-  }
-};
+    dispatch({
+      type: PRODUCT_LIST_REQUEST,
+    });
+    //* (Fetch data) from backend.
+    try {
+      const { data } = await Axios.get(`/api/products?seller=${seller}`);
+      //? Dispatching (action), change (state) redux.
+      dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
+    }
+  };
 
 /* ==> ( PRODUCT DETAILS ) <== */
 export const detailsProduct = (productId) => async (dispatch) => {

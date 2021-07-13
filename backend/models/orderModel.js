@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 /* ==> Order Schema <==
-? - new mongoose.Schema({}, {}) ==> create new object by mongoose.
-? - Link to ( product and user ) Model:
-*    - Use special mongoose Object Id ( type: ) that can be ( String or Number ).
-*    - product: { type: mongoose.Schema.Types.ObjectId }
+? new mongoose.Schema({}): Create new object by mongoose.
+? Link to ( Product and User ) Model:
+*  Use special mongoose Object Id ( type: ) that can be ( String or Number ).
+*  product: { type: mongoose.Schema.Types.ObjectId }
 */
 const orderSchema = new mongoose.Schema(
   {
@@ -40,6 +40,7 @@ const orderSchema = new mongoose.Schema(
     taxPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     isPaid: { type: Boolean, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, default: false },

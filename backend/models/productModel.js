@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
-//* Nota: name = (unique: true), for make sure avoid duplicates (products).
+//* name = unique: true, to make sure avoid duplicates ( Products ).
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
+    seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     image: { type: String, required: true },
     brand: { type: String, required: true },
     category: { type: String, required: true },

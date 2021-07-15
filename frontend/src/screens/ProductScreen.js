@@ -9,22 +9,16 @@ import Rating from "../components/Rating";
 export default function ProductScreen(props) {
   const dispatch = useDispatch();
   const productId = props.match.params.id;
-  //? - Default state (quantity) value on (1).
   const [qty, setQty] = useState(1);
-  //* - Get data from (redux store).
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
 
-  /* ==> dispatch (details-product) action <==
-   * - Second parameter [list-dependencies] need (product-id).
-   */
   useEffect(() => {
     dispatch(detailsProduct(productId));
   }, [dispatch, productId]);
 
-  /* ==> redirect button to (cart-screen) <==
-  ? - Button fun (Add-To-Cart)
-  *     onClick change url to (Cart-Screen).
+  /* ( Redirect )
+  ? Button Add Cart: onClick change url to Cart Screen.
   */
   const addToCartHandler = () => {
     props.history.push(`/cart/${productId}?qty=${qty}`);
@@ -38,7 +32,6 @@ export default function ProductScreen(props) {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <div>
-          {/* Back Home */}
           <div className="back-home">
             <Link to="/">
               <span>
@@ -47,46 +40,51 @@ export default function ProductScreen(props) {
               <span>Back to result</span>
             </Link>
           </div>
-          {/* ==> Card Item-Details <== */}
+          {/* ( Item Details ) */}
           <div className="row top">
-            {/* Item Image */}
             <div className="col-2">
               <img className="large" src={product.image} alt={product.name} />
             </div>
             <div className="col-1">
               <ul>
-                {/* Item Name */}
                 <li>
                   <h1>{product.name}</h1>
                 </li>
-                {/* Rating Stars */}
                 <li>
                   <Rating
                     rating={product.rating}
                     numReviews={product.numReviews}
                   ></Rating>
                 </li>
-                {/* Item Price */}
                 <li>price: $ {product.price}</li>
-                {/* Item Details */}
                 <li>
                   Description:
                   <p>{product.description}</p>
                 </li>
               </ul>
             </div>
-            {/* ==> Card Add-To-Cart <== */}
+            {/* ( Add Cart ) */}
             <div className="col-1">
               <div className="card card-body">
                 <ul>
-                  {/* Item Price */}
+                  <li>
+                    Seller:{" "}
+                    <h2>
+                      <Link to={`/seller/${product.seller._id}`}>
+                        {product.seller.seller.name}
+                      </Link>
+                    </h2>
+                    <Rating
+                      rating={product.seller.seller.rating}
+                      numReviews={product.seller.seller.numReviews}
+                    />
+                  </li>
                   <li>
                     <div className="row">
                       <div>Price</div>
                       <div className="price">$ {product.price}</div>
                     </div>
                   </li>
-                  {/* Item Status */}
                   <li>
                     <div className="row">
                       <div>Status</div>
@@ -99,23 +97,19 @@ export default function ProductScreen(props) {
                       </div>
                     </div>
                   </li>
-                  {/* (button) enabled if (items) is greater than (0) */}
                   {product.countInStock > 0 && (
                     <>
                       <li>
                         <div className="row">
                           <div>Quantity</div>
-                          {/* Choose Quantity */}
                           <div>
-                            {/* TODO: Learn <select> on-change fun (event-target) */}
                             <select
                               value={qty}
                               onChange={(e) => setQty(e.target.value)}
                             >
-                              {/* TODO: Learn (Spread Syntax) */}
                               {[...Array(product.countInStock).keys()].map(
                                 (x) => (
-                                  //? - Info: {x + 1} for list index (0).
+                                  //? Plus ( 1 ) because list start in ( 0 ).
                                   <option key={x + 1} value={x + 1}>
                                     {x + 1}
                                   </option>
@@ -125,7 +119,6 @@ export default function ProductScreen(props) {
                           </div>
                         </div>
                       </li>
-                      {/* Button Add-To-Cart */}
                       <li>
                         <button
                           onClick={addToCartHandler}

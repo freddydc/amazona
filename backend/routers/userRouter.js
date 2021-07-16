@@ -14,6 +14,17 @@ TODO: Test About Mongoose Works With Async.
 */
 const userRouter = express.Router();
 
+/* ==> ( Top Sellers ) <== API */
+userRouter.get(
+  "/top-sellers",
+  expressAsyncHandler(async (req, res) => {
+    const topSellers = await User.find({ isSeller: true })
+      .sort({ "seller.rating": -1 })
+      .limit(3);
+    res.send(topSellers);
+  })
+);
+
 /* ==> ( User Seed ) <== API */
 userRouter.get(
   "/seed",

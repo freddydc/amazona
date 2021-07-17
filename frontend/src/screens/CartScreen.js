@@ -4,30 +4,19 @@ import { Link } from "react-router-dom";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 import MessageBox from "../components/MessageBox";
 
+/* ( Cart Quantity )
+? Split by ( = ) index [1] get second value and return a Number.
+* Get Quantity: localhost:3000/cart/${productId}?qty=${qty} Product Screen.
+*/
 export default function CartScreen(props) {
-  /* ==> split cart-quantity <==
-  ? - Split by mark=(=) index [1], get second value of list.
-  * - Get (quantity) data by search on URL:
-  ?     localhost:3000/cart/${productId}?qty=${qty} by (product-screen).
-  * - Quantity by mark=(?) return rendering a (number) of item.
-  */
   const productId = props.match.params.id;
   const qty = props.location.search
     ? Number(props.location.search.split("=")[1])
     : 1;
 
-  //! Info.
-  // console.log(`cart-screen url: ${props.location.search} \n Quantity: ${qty}`);
-
-  //? Get cart from (redux store).
   const cart = useSelector((state) => state.cart);
-  const { cartItems } = cart;
+  const { cartItems, error } = cart;
 
-  /* ==> dispatch add-to-cart action <==
-  ? - Call (add-to-cart) action.
-  * - If product (id) exist, dispatch an action
-  *     and set (product-id) and (quantity).
-  */
   const dispatch = useDispatch();
   useEffect(() => {
     if (productId) {
@@ -35,33 +24,25 @@ export default function CartScreen(props) {
     }
   }, [dispatch, productId, qty]);
 
-  /* ==> button remove cart-items <==
-  ? - Remove item by (remove-from-cart) action defined.
-  */
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
   };
 
-  /* ==> button checkout cart-items <==
-  ? - User checkout account redirect (url).
-  */
   const checkoutHandler = () => {
     props.history.push("/signin?redirect=shipping");
   };
 
-  /* ==> calculate <subtotal item> and price <==
-  ? - Params: (a) => (accumulator-item) and (c) => (current-item).
-  * - Total quantity item => (a) + (c.qty).
-  * - Total price item => (a) + (c.price) * (c.qty).
-  ? - Default total: item and price => (0).
+  /* ( Calculate Fields )
+  ? First: a: Accumulator, c: Current Value.
+  *  Items: a + c.qty ==> Item Price: a + c.price * c.qty.
+  ? Second: Item, Price default 0 value.
   */
   return (
     <div className="row top">
       <div className="col-2">
-        {/* Item Title */}
         <h1>Shopping Cart</h1>
+        {error && <MessageBox variant="danger">{error}</MessageBox>}
         {cartItems.length === 0 ? (
-          //? - Message if cart is (empty).
           <MessageBox>
             Cart is empty. <Link to="/">Go shopping</Link>
           </MessageBox>
@@ -70,7 +51,6 @@ export default function CartScreen(props) {
             {cartItems.map((item) => (
               <li key={item.product}>
                 <div className="row">
-                  {/* Item Image */}
                   <div>
                     <img
                       src={item.image}
@@ -78,11 +58,9 @@ export default function CartScreen(props) {
                       className="small"
                     ></img>
                   </div>
-                  {/* Item Name */}
                   <div className="min-30">
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
                   </div>
-                  {/* Choose Quantity */}
                   <div>
                     <select
                       value={item.qty}
@@ -99,9 +77,7 @@ export default function CartScreen(props) {
                       ))}
                     </select>
                   </div>
-                  {/* Item Price */}
                   <div>${item.price}</div>
-                  {/* Remove Item */}
                   <div>
                     <button
                       type="button"
@@ -119,20 +95,17 @@ export default function CartScreen(props) {
       <div className="col-1">
         <div className="card card-body">
           <ul>
-            {/* Subtotal Item */}
             <li>
               <h2>
-                Subtotal ({cartItems.reduce((a, c) => a + c.qty, 0)} items) : $
-                {cartItems.reduce((a, c) => a + c.price * c.qty, 0)}
+                <i>Subtotal {cartItems.reduce((a, c) => a + c.qty, 0)} items</i>
+                : $ {cartItems.reduce((a, c) => a + c.price * c.qty, 0)}
               </h2>
             </li>
-            {/* Checkout Item */}
             <li>
               <button
                 type="button"
                 onClick={checkoutHandler}
                 className="primary block"
-                //? - Disabled if cart is (empty).
                 disabled={cartItems.length === 0}
               >
                 Proceed to Checkout

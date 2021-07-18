@@ -19,19 +19,16 @@ import {
 
 /* ==> ( PRODUCT LIST ) <== */
 export const listProducts =
-  ({ seller = "" }) =>
+  ({ seller = "", name = "" }) =>
   async (dispatch) => {
-    /*
-  ? type: (Action description)
-  * payload: (Action data information)
-  */
     dispatch({
       type: PRODUCT_LIST_REQUEST,
     });
-    //* (Fetch data) from backend.
     try {
-      const { data } = await Axios.get(`/api/products?seller=${seller}`);
-      //? Dispatching (action), change (state) redux.
+      const { data } = await Axios.get(
+        `/api/products?seller=${seller}&name=${name}`
+      );
+      //? Dispatching an Action, change State of redux store.
       dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
     } catch (error) {
       dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });

@@ -4,6 +4,7 @@ import { BrowserRouter, Link, Route } from "react-router-dom";
 import { signOut } from "./actions/userActions";
 import AdminRoute from "./components/AdminRoute";
 import PrivateRoute from "./components/PrivateRoute";
+import SearchBox from "./components/SearchBox";
 import SellerRoute from "./components/SellerRoute";
 import CartScreen from "./screens/CartScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -17,19 +18,19 @@ import ProductListScreen from "./screens/ProductListScreen";
 import ProductScreen from "./screens/ProductScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+import SearchScreen from "./screens/SearchScreen";
 import SellerScreen from "./screens/SellerScreen";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import SigninScreen from "./screens/SigninScreen";
 import UserEditScreen from "./screens/UserEditScreen";
 import UserListScreen from "./screens/UserListScreen";
 
-/* ==> ( Route ) <== tag
-? - Field: < Route exact > if url is EXACT to path ( / ) render ( HOME SCREEN ).
-* - Path: ( /cart/:id? ) last mark ( ? ) in ( /:id? ) to show:
-?    localhost:3000/cart/3?qty=8 ( CART SCREEN ) in browser.
+/* ==> ( Route ) <== TAG
+? Field: < Route exact > if url is EXACT to path ( / ) render HOME SCREEN.
+* Path: ( /cart/:id? ) last mark ( ? ) in ( /:id? ) show:
+?  localhost:3000/cart/3?qty=8 CART SCREEN.
 */
 function App() {
-  //? ==> Get access to ( DATA INFORMATION ) from ( REDUX STORE ).
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
   // console.log(`cart items: ${cartItems.length} ${cartItems}`); //! info.
@@ -52,7 +53,14 @@ function App() {
             </Link>
           </div>
           <div>
-            {/* ( BADGE ADD TO CART ) to show quantity ICON */}
+            <Route
+              render={({ history }) => (
+                <SearchBox history={history}></SearchBox>
+              )}
+            ></Route>
+          </div>
+          <div>
+            {/* ( BADGE ADD CART ) show quantity ICON */}
             <Link to="/cart">
               Cart
               {cartItems.length > 0 && (
@@ -143,6 +151,11 @@ function App() {
           <Route path="/placeorder" component={PlaceOrderScreen}></Route>
           <Route path="/order/:id" component={OrderScreen}></Route>
           <Route path="/orderhistory" component={OrderHistoryScreen}></Route>
+          <Route
+            path={`/search/name/:name?`}
+            component={SearchScreen}
+            exact
+          ></Route>
           <PrivateRoute
             path="/profile"
             component={ProfileScreen}

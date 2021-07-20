@@ -11,6 +11,7 @@ import {
   orderPayReducer,
 } from "./reducers/orderReducers";
 import {
+  productCategoryListReducer,
   productCreateReducer,
   productDeleteReducer,
   productDetailsReducer,
@@ -29,10 +30,9 @@ import {
   userUpdateReducer,
 } from "./reducers/userReducers";
 
-/* ==> (redux-store) initial state on (local-storage) <==
-* == cart ==
-? - Default data for (cart) by (local storage) opening browser again.
-* - getItem: using (key name cartItems), by cart action.
+/* ==> ( Redux Store ) <== LOCAL STORAGE STATE.
+? Default: Data for cart by Local Storage opening browser again.
+* Get Item: Using key name = cartItems by Cart action.
 */
 const initialState = {
   userSignIn: {
@@ -47,22 +47,18 @@ const initialState = {
     shippingAddress: localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
       : {},
-    /* Default payment method */
     paymentMethod: "PayPal",
   },
 };
-/* ==> without-reducer <==
-? - For use without (reducers), need import (data.js by front)
-*     for return (state) = products.
-? - state: before = (empty), later have: (products data).
-* - action: type = (@Init).
 
+/* ==> ( Reducer ) <== SAMPLE.
+? Usage without reducer, need import data.js by front to return state = products.
   const reducer = (state, action) => {
     return { products: data.products };
   };
 */
 
-//? ==> Redux-Store for combine (reducers).
+/* ==> ( Redux Store ) <== COMBINE REDUCERS. */
 const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
@@ -86,11 +82,12 @@ const reducer = combineReducers({
   userList: userListReducer,
   userDelete: userDeleteReducer,
   userTopSellerList: userTopSellerListReducer,
+  productCategoryList: productCategoryListReducer,
 });
 
-/* <== compose-fun <==
-? - (composeEnhancer) upgrade default (compose redux fun),
-*     to show (redux store) on (browser) plugin.
+/* ==> ( Compose ) <== FUN.
+? Compose Enhancer:
+*  Upgrade default compose redux fun, to show redux store in browser with plugin.
 */
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(

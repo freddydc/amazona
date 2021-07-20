@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Link, Route } from "react-router-dom";
+import { listProductCategories } from "./actions/productActions";
 import { signOut } from "./actions/userActions";
 import AdminRoute from "./components/AdminRoute";
 import PrivateRoute from "./components/PrivateRoute";
@@ -24,6 +25,8 @@ import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import SigninScreen from "./screens/SigninScreen";
 import UserEditScreen from "./screens/UserEditScreen";
 import UserListScreen from "./screens/UserListScreen";
+import LoadingBox from "./components/LoadingBox";
+import MessageBox from "./components/MessageBox";
 
 /* ==> ( Route ) <== TAG
 ? Field: < Route exact > if url is EXACT to path ( / ) render HOME SCREEN.
@@ -32,6 +35,7 @@ import UserListScreen from "./screens/UserListScreen";
 */
 function App() {
   const cart = useSelector((state) => state.cart);
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const { cartItems } = cart;
   // console.log(`cart items: ${cartItems.length} ${cartItems}`); //! info.
 
@@ -43,11 +47,29 @@ function App() {
     dispatch(signOut());
   };
 
+  const productCategoryList = useSelector((state) => state.productCategoryList);
+  const {
+    loading: loadingCategories,
+    error: errorCategories,
+    categories,
+  } = productCategoryList;
+
+  useEffect(() => {
+    dispatch(listProductCategories());
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <div className="grid-container">
         <header className="row">
           <div>
+            <button
+              type="button"
+              className="open-sidebar"
+              onClick={() => setSidebarIsOpen(true)}
+            >
+              <i className="fa fa-bars"></i>
+            </button>
             <Link className="brand" to="/">
               magazine
             </Link>
@@ -135,6 +157,44 @@ function App() {
             )}
           </div>
         </header>
+        <aside className={sidebarIsOpen ? "open" : ""}>
+          <ul className="categories">
+            <li className="sidebar-header">
+              <span>
+                <strong>Categories</strong>
+              </span>
+              <div>
+                <button
+                  type="button"
+                  className="close-sidebar"
+                  onClick={() => setSidebarIsOpen(false)}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+            </li>
+            {loadingCategories ? (
+              <LoadingBox />
+            ) : errorCategories ? (
+              <MessageBox variant="danger">{errorCategories}</MessageBox>
+            ) : (
+              categories.map((c) => (
+                <Link
+                  key={c}
+                  to={`/search/category/${c}`}
+                  onClick={() => setSidebarIsOpen(false)}
+                >
+                  <li className="sidebar-content">
+                    <span>{c}</span>
+                    <span>
+                      <i className="fas fa-angle-right"></i>
+                    </span>
+                  </li>
+                </Link>
+              ))
+            )}
+          </ul>
+        </aside>
         <main>
           <Route path="/seller/:id" component={SellerScreen}></Route>
           <Route path="/cart/:id?" component={CartScreen}></Route>
@@ -153,6 +213,16 @@ function App() {
           <Route path="/orderhistory" component={OrderHistoryScreen}></Route>
           <Route
             path={`/search/name/:name?`}
+            component={SearchScreen}
+            exact
+          ></Route>
+          <Route
+            path={`/search/category/:category`}
+            component={SearchScreen}
+            exact
+          ></Route>
+          <Route
+            path={`/search/category/:category/name/:name`}
             component={SearchScreen}
             exact
           ></Route>

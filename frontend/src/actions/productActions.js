@@ -15,18 +15,21 @@ import {
   PRODUCT_DELETE_REQUEST,
   PRODUCT_DELETE_SUCCESS,
   PRODUCT_DELETE_FAIL,
+  PRODUCT_CATEGORY_LIST_REQUEST,
+  PRODUCT_CATEGORY_LIST_SUCCESS,
+  PRODUCT_CATEGORY_LIST_FAIL,
 } from "../constants/productConstants";
 
 /* ==> ( PRODUCT LIST ) <== */
 export const listProducts =
-  ({ seller = "", name = "" }) =>
+  ({ seller = "", name = "", category = "" }) =>
   async (dispatch) => {
     dispatch({
       type: PRODUCT_LIST_REQUEST,
     });
     try {
       const { data } = await Axios.get(
-        `/api/products?seller=${seller}&name=${name}`
+        `/api/products?seller=${seller}&name=${name}&category=${category}`
       );
       //? Dispatching an Action, change State of redux store.
       dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
@@ -34,6 +37,21 @@ export const listProducts =
       dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
     }
   };
+
+/* ==> ( CATEGORY LIST ) <== */
+export const listProductCategories = () => async (dispatch) => {
+  dispatch({ type: PRODUCT_CATEGORY_LIST_REQUEST });
+  try {
+    const { data } = await Axios.get(`/api/products/categories`);
+    dispatch({ type: PRODUCT_CATEGORY_LIST_SUCCESS, payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({ type: PRODUCT_CATEGORY_LIST_FAIL, payload: message });
+  }
+};
 
 /* ==> ( PRODUCT DETAILS ) <== */
 export const detailsProduct = (productId) => async (dispatch) => {

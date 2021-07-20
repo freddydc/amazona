@@ -150,6 +150,60 @@ a.brand {
   padding: 1rem;
 }
 /* * (End: == Shipping Cart Item Name ==) */
+/* ( Aside ) */
+aside {
+  position: fixed;
+  width: 30rem;
+  height: 100%;
+  background-color: #efefef;
+  z-index: 1000;
+  transform: translateX(-30rem);
+  transition: all 0.5s;
+}
+aside.open {
+  transform: translateX(0);
+}
+button.open-sidebar {
+  font-size: 3rem;
+  padding: 0.2rem 0.5rem;
+  margin: 0 0.5rem;
+  background: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+button.open-sidebar:hover {
+  border-color: #ffffff;
+}
+aside ul {
+  padding: 0;
+  list-style: none;
+}
+aside li {
+  display: flex;
+  color: #111;
+  justify-content: space-between;
+  padding: 1rem;
+}
+button.close-sidebar {
+  padding: 0.3rem 0.8rem;
+}
+li.sidebar-header span {
+  font-size: 2rem;
+  padding: 0.3rem 0;
+  margin-left: 1.4rem;
+}
+li.sidebar-content span {
+  margin: 0 1.4rem;
+}
+li.sidebar-content span:last-child {
+  color: #c0c0c0;
+}
+li.sidebar-content:hover,
+li.sidebar-content:hover span:last-child {
+  color: #111;
+  background-color: #f8f8f8;
+}
+/* ( END Aside ) */
 /* ==> Image <== */
 img {
   border-radius: 0.5rem;

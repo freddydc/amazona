@@ -1,18 +1,18 @@
 import React from "react";
 
 export default function Rating(props) {
-  const { rating, numReviews } = props;
-
+  const { rating, numReviews, caption } = props;
+  //? fa fa-star: ONE, fa-star-half-alt: HALF STAR, fa-star: EMPTY.
   return (
     <div className="rating">
       <span>
         <i
           className={
             rating >= 1
-              ? "fa fa-star" // One star
+              ? "fa fa-star"
               : rating >= 0.5
-              ? "fa fa-star-half-alt" // Half star 50%
-              : "far fa-star" // Empty star
+              ? "fa fa-star-half-alt"
+              : "far fa-star"
           }
         ></i>
       </span>
@@ -60,7 +60,11 @@ export default function Rating(props) {
           }
         ></i>
       </span>
-      <span>{numReviews + " reviews"}</span>
+      {caption ? (
+        <span>{caption}</span>
+      ) : (
+        <span>{numReviews + " reviews"}</span>
+      )}
     </div>
   );
 }

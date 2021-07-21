@@ -386,3 +386,6 @@ img.large {
   margin-right: 0.5rem;
 }
 /* ( END Search ) */
+.active {
+  font-weight: bold;
+}

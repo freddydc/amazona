@@ -16,6 +16,7 @@ import {
   productDeleteReducer,
   productDetailsReducer,
   productListReducer,
+  productReviewCreateReducer,
   productUpdateReducer,
 } from "./reducers/productReducers";
 import { imageUploadReducer } from "./reducers/uploadReducers";
@@ -83,6 +84,7 @@ const reducer = combineReducers({
   userDelete: userDeleteReducer,
   userTopSellerList: userTopSellerListReducer,
   productCategoryList: productCategoryListReducer,
+  productReviewCreate: productReviewCreateReducer,
 });
 
 /* ==> ( Compose ) <== FUN.

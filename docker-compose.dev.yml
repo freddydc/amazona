@@ -21,10 +21,10 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - MONGO_HOSTNAME=$MONGODB_HOSTNAME
-      - MONGO_PORT=$MONGODB_PORT
-      - MONGO=$MONGO_DB
+      - MONGO_URL=$MONGODB_URL
       - JWT=$JWT_SECRET
+      - PAYPAL_CLIENT=$PAYPAL_CLIENT_ID
+      - MAPS_API_KEY=$GOOGLE_API_KEY
     ports:
       - "5000:5000"
     networks:

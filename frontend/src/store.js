@@ -21,6 +21,7 @@ import {
 } from "./reducers/productReducers";
 import { imageUploadReducer } from "./reducers/uploadReducers";
 import {
+  userAddressMapReducer,
   userDeleteReducer,
   userDetailsReducer,
   userListReducer,
@@ -85,6 +86,7 @@ const reducer = combineReducers({
   userTopSellerList: userTopSellerListReducer,
   productCategoryList: productCategoryListReducer,
   productReviewCreate: productReviewCreateReducer,
+  userAddressMap: userAddressMapReducer,
 });
 
 /* ==> ( Compose ) <== FUN.

@@ -27,6 +27,7 @@ import UserEditScreen from "./screens/UserEditScreen";
 import UserListScreen from "./screens/UserListScreen";
 import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
+import MapScreen from "./screens/MapScreen";
 
 /* ==> ( Route ) <== TAG
 ? Field: < Route exact > if url is EXACT to path ( / ) render HOME SCREEN.
@@ -235,6 +236,7 @@ function App() {
             path="/profile"
             component={ProfileScreen}
           ></PrivateRoute>
+          <PrivateRoute path={"/map"} component={MapScreen}></PrivateRoute>
           <AdminRoute
             path="/product-list"
             component={ProductListScreen}

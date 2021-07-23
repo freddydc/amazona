@@ -11,24 +11,19 @@ dotenv.config();
 
 const app = express();
 
-/* ==> ( Middleware ) <==
-TODO: - Learn express ( GET and POST ) method.
-*/
+/* ==> ( Middleware ) <== */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/* ==> ( Before Mongodb ) <==
-? - Url: ( /:id ) for ( req.params.id ) by user ( input ).
-* - Product data is used by ( actions and reducers )
-*    - for ( product list and details ).
+/* ( Sample )
+? Url: ( /:id ) for Request Params Id by user input.
+* Product data used in actions, reducers by product List and Details.
 
 app.get("/api/products/:id", (req, res) => {
   const product = data.products.find((x) => x._id === req.params.id);
-  * - Check ( product ).
   if (product) {
     res.send(product);
   } else {
-    * - Create custom error ( message ).
     res.status(404).send({ message: "Product Not Found" });
   }
 });
@@ -38,21 +33,21 @@ app.get("/api/products", (req, res) => {
 */
 
 /* ==> ( Mongoose ) <==
-* - First parameter URL: 'mongodb://localhost/amazona'
-TODO: - Learn second parameter options:
-* - Use-New-Url-Parser: true ==> for get ( warnings )
-*    - for duplicates in mongodb collection.
+? Use New Url Parser: true, for get duplicates WARNINGS in collection.
+TODO: Test second field for options.
 */
-const { MONGODB_HOSTNAME, MONGODB_PORT, MONGO_DB } = process.env;
-const urlMongodb = `mongodb://${MONGODB_HOSTNAME}:${MONGODB_PORT}/${MONGO_DB}`;
-const optMongodb = {
+const mongodbOpt = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
 };
-mongoose.connect(urlMongodb || "mongodb://localhost/amazona", optMongodb);
 
-/* ==> ( Routers ) <== */
+mongoose.connect(
+  process.env.MONGODB_URL || "mongodb://localhost/amazona",
+  mongodbOpt
+);
+
+/* ==> ( Screen Router ) <== */
 app.use("/api/uploads", uploadRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
@@ -62,7 +57,11 @@ app.get("/api/config/paypal", (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || "sb");
 });
 
-/* ( UPLOAD ROUTE ) */
+app.get("/api/config/google", (req, res) => {
+  res.send(process.env.GOOGLE_API_KEY || "");
+});
+
+/* ==> ( Upload Router ) <== */
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
@@ -70,10 +69,8 @@ app.get("/", (req, res) => {
   res.send("Server is ready");
 });
 
-/* ==> ( Middleware ) <==
-? - Send error message to ( Front Client ) for
-?    - view all errors generated in routers by ( Middleware ) catcher.
-TODO: - Test key name ( message ).
+/* ==> ( Middleware Catcher ) <==
+? Send message to Front for show all errors generated in routers.
 */
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });

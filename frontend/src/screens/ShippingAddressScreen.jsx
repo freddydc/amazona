@@ -4,15 +4,15 @@ import { saveShippingAddress } from "../actions/cartActions";
 import CheckoutSteps from "../components/CheckoutSteps";
 
 export default function ShippingAddressScreen(props) {
-  /* ==> check ( !user-info ) <==
-  ? - If not logged can not see ( shipping-screen )
-  ?     and make request the user to ( signin-screen )
-  ?     because only logged user can see ( shipping-screen ).
-  */
   const userSignin = useSelector((state) => state.userSignIn);
   const { userInfo } = userSignin;
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
+
+  const [lat, setLat] = useState(shippingAddress.lat);
+  const [lng, setLng] = useState(shippingAddress.lng);
+  const userAddressMap = useSelector((state) => state.userAddressMap);
+  const { address: addressMap } = userAddressMap;
 
   if (!userInfo) {
     props.history.push("/signin");
@@ -27,28 +27,62 @@ export default function ShippingAddressScreen(props) {
   const [country, setCountry] = useState(shippingAddress.country || "");
 
   const dispatch = useDispatch();
-  /* ==> (save-shipping-address) dispatch <==
-  ? - Set inside { brackets } ( save-shipping-address dispatch data)
-  *     because ( save-shipping-address action ) passed a single
-  *     object ( data ) parameter.
+  /* ==> ( Shipping Address ) <==
+  ? Set: Inside { BRACKETS } to saveShippingAddress({ Data Field })
+  *  because action fun receives a single object ( data ) Field.
   */
   const submitHandler = (e) => {
     e.preventDefault();
+    const newLat = addressMap ? addressMap.lat : lat;
+    const newLng = addressMap ? addressMap.lng : lng;
+
+    if (addressMap) {
+      setLat(addressMap.lat);
+      setLng(addressMap.lng);
+    }
+    let moveOn = true;
+
+    if (!newLat || !newLng) {
+      moveOn = window.confirm(`You didn't set your location on map. Continue`);
+    }
+    if (moveOn) {
+      dispatch(
+        saveShippingAddress({
+          fullName,
+          address,
+          city,
+          postalCode,
+          country,
+          lat: newLat,
+          lng: newLng,
+        })
+      );
+      props.history.push("/payment");
+    }
+  };
+
+  const chooseOnMap = () => {
     dispatch(
-      saveShippingAddress({ fullName, address, city, postalCode, country })
+      saveShippingAddress({
+        fullName,
+        address,
+        city,
+        postalCode,
+        country,
+        lat,
+        lng,
+      })
     );
-    props.history.push("/payment");
+    props.history.push("/map");
   };
 
   return (
     <div>
-      {/* Steps */}
       <CheckoutSteps step1 step2></CheckoutSteps>
       <form className="form" onSubmit={submitHandler}>
         <div>
           <h1>Shipping Address</h1>
         </div>
-        {/* Full Name */}
         <div>
           <label htmlFor="fullName">Full Name</label>
           <input
@@ -60,7 +94,6 @@ export default function ShippingAddressScreen(props) {
             required
           ></input>
         </div>
-        {/* Address */}
         <div>
           <label htmlFor="address">Address</label>
           <input
@@ -72,7 +105,6 @@ export default function ShippingAddressScreen(props) {
             required
           ></input>
         </div>
-        {/* City */}
         <div>
           <label htmlFor="city">City</label>
           <input
@@ -84,7 +116,6 @@ export default function ShippingAddressScreen(props) {
             required
           ></input>
         </div>
-        {/* Postal Code */}
         <div>
           <label htmlFor="postalCode">Postal Code</label>
           <input
@@ -96,7 +127,6 @@ export default function ShippingAddressScreen(props) {
             required
           ></input>
         </div>
-        {/* Country */}
         <div>
           <label htmlFor="country">Country</label>
           <input
@@ -108,7 +138,12 @@ export default function ShippingAddressScreen(props) {
             required
           ></input>
         </div>
-        {/* Continue */}
+        <div>
+          <label htmlFor="chooseOnMap">Location</label>
+          <button type="button" onClick={chooseOnMap}>
+            Choose On Map
+          </button>
+        </div>
         <div>
           <label />
           <button className="primary" type="submit">

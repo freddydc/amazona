@@ -28,6 +28,7 @@ import UserListScreen from "./screens/UserListScreen";
 import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
 import MapScreen from "./screens/MapScreen";
+import DashboardScreen from "./screens/DashboardScreen";
 
 /* ==> ( Route ) <== TAG
 ? Field: < Route exact > if url is EXACT to path ( / ) render HOME SCREEN.
@@ -256,6 +257,10 @@ function App() {
           <AdminRoute
             path="/user/:id/edit"
             component={UserEditScreen}
+          ></AdminRoute>
+          <AdminRoute
+            path={"/dashboard"}
+            component={DashboardScreen}
           ></AdminRoute>
           <SellerRoute
             path="/product-list/seller"

@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import mg from "mailgun-js";
 
 /* ==> ( TOKEN GENERATOR ) <== */
 export const generateToken = (user) => {
@@ -66,4 +67,88 @@ export const isSellerOrAdmin = (req, res, next) => {
   } else {
     res.status(401).send({ message: "Invalid Admin Or Seller Token" });
   }
+};
+
+/* ==> ( Mailgun ) <== API */
+export const mailgun = () =>
+  mg({
+    apiKey: process.env.MAILGUN_API_KEY,
+    domain: process.env.MAILGUN_DOMAIN,
+  });
+
+export const payOrderEmailTemplate = (order) => {
+  const emailTemplate = `
+    <h1>THANKS FOR SHOPPING WITH US</h1>
+    <p>Hi ${order.user.name}, We have finished processing your order.</p>
+    <h2>
+      Order: ${order._id.toString().substring(0, 8)} ( ${order.createdAt
+    .toString()
+    .substring(0, 10)} )
+    </h2>
+    <table>
+      <thead>
+        <tr>
+          <td>
+            <strong>PRODUCT</strong>
+          </td>
+          <td>
+            <strong>QUANTITY</strong>
+          </td>
+          <td align="right">
+            <strong>PRICE</strong>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        ${order.orderItems
+          .map(
+            (item) => `
+              <tr>
+                <td>${item.name}</td>
+                <td align="center">${item.qty}</td>
+                <td align="right">$${item.price.toFixed(2)}</td>
+              </tr>
+            `
+          )
+          .join("\n")}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Items price:</td>
+          <td align="right">$${order.itemsPrice.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td colspan="2">Tax price:</td>
+          <td align="right">$${order.taxPrice.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td colspan="2">Shipping price:</td>
+          <td align="right">$${order.shippingPrice.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td colspan="2">Payment method:</td>
+          <td align="right">${order.paymentMethod}</td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <strong>Total price:</strong>
+          </td>
+          <td align="right">
+            <strong>$${order.totalPrice.toFixed(2)}</strong>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    <h2>Shipping Address</h2>
+    <p>
+      Name: ${order.shippingAddress.fullName} <br />
+      Address: ${order.shippingAddress.address} <br />
+      City: ${order.shippingAddress.city} <br />
+      Country: ${order.shippingAddress.country} <br />
+      Postal Code: ${order.shippingAddress.postalCode}
+    </p>
+    <hr />
+    <p>Thanks for shopping with us.</p>
+  `;
+  return emailTemplate;
 };

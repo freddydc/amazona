@@ -1,7 +1,13 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
-import { isAdmin, isAuth, isSellerOrAdmin } from "../utils.js";
+import {
+  isAdmin,
+  isAuth,
+  isSellerOrAdmin,
+  mailgun,
+  payOrderEmailTemplate,
+} from "../utils.js";
 
 const orderRouter = express.Router();
 
@@ -94,7 +100,10 @@ orderRouter.put(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     //? ==> Get ( order model by ID ) to complete pay.
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate(
+      "user",
+      "email name"
+    );
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
@@ -107,6 +116,23 @@ orderRouter.put(
       };
       //? ==> Changing old ( Order Data ) with new information.
       const updatedOrder = await order.save();
+      mailgun()
+        .messages()
+        .send(
+          {
+            from: `Magazine <magazine@sample.com>`,
+            to: `${order.user.name} <${order.user.email}>`,
+            subject: `Magazine ${order._id.toString().substring(0, 8)}`,
+            html: payOrderEmailTemplate(order),
+          },
+          (error, body) => {
+            if (error) {
+              console.log(`mailgun:`, error);
+            } else {
+              console.log(`mailgun:`, body);
+            }
+          }
+        );
       res.send({ message: "Order Paid", order: updatedOrder });
     } else {
       res.status(404).send({ message: "Order Not Found" });

@@ -14,15 +14,13 @@ git clone https://github.com/freddydc/amazona.git
 
 ### 2. Tools
 
-Open root folder and run:
+Inside root run:
 
 ```
 npm install
 ```
 
 ### 3. Server
-
-Inside root run:
 
 ```
 cd backend
@@ -37,8 +35,6 @@ npm start
 ```
 
 ### 4. Frontend
-
-Inside root run:
 
 ```
 cd frontend

@@ -1,8 +1,10 @@
-# Commerce Website
+# Magazine Commerce
+
+![amazona](frontend/public/images/magazine.png)
 
 Welcome to e-commerce website using ( `MongoDB`, `React`, `ExpressJS` and `Node.js`).
 
-## Locally
+## Run It Locally
 
 ### 1. Clone Repo
 
@@ -10,17 +12,17 @@ Welcome to e-commerce website using ( `MongoDB`, `React`, `ExpressJS` and `Node.
 git clone https://github.com/freddydc/amazona.git
 ```
 
-### 2. Set Up Development Tools
+### 2. Tools
 
-Run `npm install` inside root.
+Open root folder and run:
 
 ```
 npm install
 ```
 
-### 3. Set Up Server
+### 3. Server
 
-Run `npm install` inside backend:
+Inside root run:
 
 ```
 cd backend
@@ -34,9 +36,9 @@ npm install
 npm start
 ```
 
-### 4. Set Up Storefront
+### 4. Frontend
 
-Run `npm install` inside frontend:
+Inside root run:
 
 ```
 cd frontend
@@ -52,16 +54,16 @@ npm start
 
 ### 5. Seed Users And Products
 
--   Run this on browser: http://localhost:5000/api/users/seed
--   It returns admin `email` and `password`
--   Run this on browser: http://localhost:5000/api/products/seed
--   It creates 6 sample `products`
+- Run this on browser: http://localhost:5000/api/users/seed
+- It returns admin `Email` and `Password`
+- Run this on browser: http://localhost:5000/api/products/seed
+- It creates sample `Products`
 
 ## Docker
 
-### 1. Start Services
+### 1. Set Up
 
-Run `make up` inside root to start services:
+Inside root run:
 
 ```
 make up
